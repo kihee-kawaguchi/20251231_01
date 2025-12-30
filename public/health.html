@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page-title">Health Overview - LifeOS AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2C5F7F;
+            --secondary-color: #5A9BC6;
+            --text-dark: #2C3E50;
+            --text-light: #6C7A89;
+            --bg-light: #F8F9FA;
+            --white: #FFFFFF;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --excellent: #4CAF50;
+            --good: #8BC34A;
+            --fair: #FFC107;
+            --poor: #FF5722;
+            --border: #E0E0E0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 2px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .back-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Health Score Circle */
+        .health-score-container {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .score-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--excellent);
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-status {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: #E8F5E9;
+            color: var(--excellent);
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .metric-icon {
+            font-size: 2rem;
+        }
+
+        .metric-title {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .progress-ring {
+            width: 80px;
+            height: 80px;
+        }
+
+        .widget {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .widget-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .activity-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 200px;
+            margin: 2rem 0;
+            gap: 0.5rem;
+        }
+
+        .day-bar {
+            flex: 1;
+            background: var(--bg-light);
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .day-bar.active {
+            background: linear-gradient(to top, var(--secondary-color), var(--primary-color));
+        }
+
+        .day-bar:hover {
+            opacity: 0.8;
+        }
+
+        .day-label {
+            position: absolute;
+            bottom: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .meal-log {
+            list-style: none;
+        }
+
+        .meal-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .meal-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .meal-icon {
+            font-size: 2rem;
+        }
+
+        .meal-details h4 {
+            margin-bottom: 0.3rem;
+        }
+
+        .meal-details p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .calories {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .sleep-timeline {
+            margin: 2rem 0;
+        }
+
+        .timeline-bar {
+            height: 60px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                transparent 33%,
+                var(--primary-color) 33%,
+                var(--secondary-color) 83%,
+                transparent 83%,
+                transparent 100%
+            );
+            border-radius: 8px;
+            position: relative;
+            margin: 1rem 0;
+        }
+
+        .timeline-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="dashboard.html" class="back-link">← <span data-i18n="back-to-dashboard">Back to Dashboard</span></a>
+
+        <div class="header">
+            <div>
+                <h1 data-i18n="header-title">💪 Health Overview</h1>
+                <p data-i18n="header-subtitle">Track your wellness journey</p>
+            </div>
+            <div class="lang-toggle">
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ja">日本語</button>
+            </div>
+        </div>
+
+        <!-- Overall Health Score -->
+        <div class="health-score-container">
+            <div class="score-label" data-i18n="overall-score">Overall Health Score</div>
+            <div class="score-circle">
+                <svg width="200" height="200">
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="#E0E0E0" stroke-width="12"/>
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="#4CAF50" stroke-width="12"
+                            stroke-dasharray="565.48" stroke-dashoffset="113" stroke-linecap="round"/>
+                </svg>
+                <div class="score-value">85</div>
+            </div>
+            <div class="score-status" data-i18n="status-excellent">Excellent</div>
+            <p style="margin-top: 1rem; color: var(--text-light);" data-i18n="score-description">
+                You're doing great! Keep up your healthy habits.
+            </p>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">🏃</div>
+                </div>
+                <div class="metric-title" data-i18n="steps-today">Steps Today</div>
+                <div class="metric-value" style="color: var(--success);">8,542</div>
+                <div class="metric-subtitle" data-i18n="steps-goal">Goal: 10,000 steps</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">❤️</div>
+                </div>
+                <div class="metric-title" data-i18n="heart-rate">Heart Rate</div>
+                <div class="metric-value" style="color: var(--excellent);">72 <span style="font-size: 1rem;">bpm</span></div>
+                <div class="metric-subtitle" data-i18n="resting-hr">Resting heart rate</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">💧</div>
+                </div>
+                <div class="metric-title" data-i18n="water-intake">Water Intake</div>
+                <div class="metric-value" style="color: var(--secondary-color);">6.5 <span style="font-size: 1rem;">cups</span></div>
+                <div class="metric-subtitle" data-i18n="water-goal">Goal: 8 cups</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">⚖️</div>
+                </div>
+                <div class="metric-title" data-i18n="weight">Weight</div>
+                <div class="metric-value" style="color: var(--primary-color);">72.5 <span style="font-size: 1rem;">kg</span></div>
+                <div class="metric-subtitle" data-i18n="weight-change">-0.5kg this week</div>
+            </div>
+        </div>
+
+        <!-- Weekly Activity -->
+        <div class="widget">
+            <div class="widget-title" data-i18n="weekly-activity">Weekly Activity</div>
+            <div class="activity-chart">
+                <div class="day-bar active" style="height: 85%;">
+                    <span class="day-label" data-i18n="day-mon">Mon</span>
+                </div>
+                <div class="day-bar active" style="height: 70%;">
+                    <span class="day-label" data-i18n="day-tue">Tue</span>
+                </div>
+                <div class="day-bar active" style="height: 90%;">
+                    <span class="day-label" data-i18n="day-wed">Wed</span>
+                </div>
+                <div class="day-bar active" style="height: 65%;">
+                    <span class="day-label" data-i18n="day-thu">Thu</span>
+                </div>
+                <div class="day-bar" style="height: 30%;">
+                    <span class="day-label" data-i18n="day-fri">Fri</span>
+                </div>
+                <div class="day-bar" style="height: 30%;">
+                    <span class="day-label" data-i18n="day-sat">Sat</span>
+                </div>
+                <div class="day-bar" style="height: 30%;">
+                    <span class="day-label" data-i18n="day-sun">Sun</span>
+                </div>
+            </div>
+            <p style="text-align: center; color: var(--text-light);" data-i18n="activity-summary">
+                4 out of 7 days with activity - Keep going!
+            </p>
+        </div>
+
+        <!-- Today's Meals -->
+        <div class="widget">
+            <div class="widget-title" data-i18n="todays-meals">Today's Meals</div>
+            <ul class="meal-log">
+                <li class="meal-item">
+                    <div class="meal-info">
+                        <div class="meal-icon">🥞</div>
+                        <div class="meal-details">
+                            <h4 data-i18n="meal-breakfast">Breakfast</h4>
+                            <p data-i18n="meal-breakfast-desc">Oatmeal with berries, coffee</p>
+                        </div>
+                    </div>
+                    <div class="calories">340 <span style="font-size: 0.9rem;">cal</span></div>
+                </li>
+                <li class="meal-item">
+                    <div class="meal-info">
+                        <div class="meal-icon">🥗</div>
+                        <div class="meal-details">
+                            <h4 data-i18n="meal-lunch">Lunch</h4>
+                            <p data-i18n="meal-lunch-desc">Chicken salad, whole grain bread</p>
+                        </div>
+                    </div>
+                    <div class="calories">520 <span style="font-size: 0.9rem;">cal</span></div>
+                </li>
+                <li class="meal-item">
+                    <div class="meal-info">
+                        <div class="meal-icon">🍎</div>
+                        <div class="meal-details">
+                            <h4 data-i18n="meal-snack">Snack</h4>
+                            <p data-i18n="meal-snack-desc">Apple, almonds</p>
+                        </div>
+                    </div>
+                    <div class="calories">180 <span style="font-size: 0.9rem;">cal</span></div>
+                </li>
+                <li class="meal-item">
+                    <div class="meal-info">
+                        <div class="meal-icon">🍱</div>
+                        <div class="meal-details">
+                            <h4 data-i18n="meal-dinner">Dinner</h4>
+                            <p data-i18n="meal-dinner-desc">Grilled salmon, vegetables, brown rice</p>
+                        </div>
+                    </div>
+                    <div class="calories">650 <span style="font-size: 0.9rem;">cal</span></div>
+                </li>
+            </ul>
+            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); text-align: center;">
+                <span style="font-size: 1.2rem; font-weight: 600;" data-i18n="total-calories">Total Calories:</span>
+                <span style="font-size: 1.5rem; font-weight: 700; color: var(--success); margin-left: 0.5rem;">1,690</span>
+                <span style="font-size: 1rem; color: var(--text-light);"> / 2,000 cal</span>
+            </div>
+        </div>
+
+        <!-- Sleep Analysis -->
+        <div class="widget">
+            <div class="widget-title" data-i18n="sleep-analysis">Sleep Analysis</div>
+            <div class="sleep-timeline">
+                <div class="timeline-labels">
+                    <span>10 PM</span>
+                    <span>2 AM</span>
+                    <span>6 AM</span>
+                    <span>10 AM</span>
+                </div>
+                <div class="timeline-bar"></div>
+                <div class="timeline-labels">
+                    <span data-i18n="sleep-bedtime">Bedtime: 11:00 PM</span>
+                    <span data-i18n="sleep-wakeup">Wake up: 6:30 AM</span>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">7.5h</div>
+                    <div class="stat-label" data-i18n="sleep-duration">Duration</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label" data-i18n="sleep-quality">Quality</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label" data-i18n="sleep-efficiency">Efficiency</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exercise Log -->
+        <div class="widget">
+            <div class="widget-title" data-i18n="exercise-log">Exercise Log</div>
+            <ul class="meal-log">
+                <li class="meal-item">
+                    <div class="meal-info">
+                        <div class="meal-icon">🏃</div>
+                        <div class="meal-details">
+                            <h4 data-i18n="exercise-running">Morning Run</h4>
+                            <p data-i18n="exercise-running-desc">5.2 km in 32 minutes</p>
+                        </div>
+                    </div>
+                    <div class="calories" style="color: var(--success);">420 <span style="font-size: 0.9rem;">cal</span></div>
+                </li>
+                <li class="meal-item">
+                    <div class="meal-info">
+                        <div class="meal-icon">🧘</div>
+                        <div class="meal-details">
+                            <h4 data-i18n="exercise-yoga">Yoga Session</h4>
+                            <p data-i18n="exercise-yoga-desc">30 minutes - Flexibility</p>
+                        </div>
+                    </div>
+                    <div class="calories" style="color: var(--success);">150 <span style="font-size: 0.9rem;">cal</span></div>
+                </li>
+                <li class="meal-item">
+                    <div class="meal-info">
+                        <div class="meal-icon">🚴</div>
+                        <div class="meal-details">
+                            <h4 data-i18n="exercise-cycling">Evening Cycling</h4>
+                            <p data-i18n="exercise-cycling-desc">12 km in 45 minutes</p>
+                        </div>
+                    </div>
+                    <div class="calories" style="color: var(--success);">380 <span style="font-size: 0.9rem;">cal</span></div>
+                </li>
+            </ul>
+            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); text-align: center;">
+                <span style="font-size: 1.2rem; font-weight: 600;" data-i18n="calories-burned">Calories Burned:</span>
+                <span style="font-size: 1.5rem; font-weight: 700; color: var(--excellent); margin-left: 0.5rem;">950</span>
+                <span style="font-size: 1rem; color: var(--text-light);"> cal</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                'page-title': 'Health Overview - LifeOS AI',
+                'back-to-dashboard': 'Back to Dashboard',
+                'header-title': '💪 Health Overview',
+                'header-subtitle': 'Track your wellness journey',
+                'overall-score': 'Overall Health Score',
+                'status-excellent': 'Excellent',
+                'score-description': "You're doing great! Keep up your healthy habits.",
+                'steps-today': 'Steps Today',
+                'steps-goal': 'Goal: 10,000 steps',
+                'heart-rate': 'Heart Rate',
+                'resting-hr': 'Resting heart rate',
+                'water-intake': 'Water Intake',
+                'water-goal': 'Goal: 8 cups',
+                'weight': 'Weight',
+                'weight-change': '-0.5kg this week',
+                'weekly-activity': 'Weekly Activity',
+                'day-mon': 'Mon',
+                'day-tue': 'Tue',
+                'day-wed': 'Wed',
+                'day-thu': 'Thu',
+                'day-fri': 'Fri',
+                'day-sat': 'Sat',
+                'day-sun': 'Sun',
+                'activity-summary': '4 out of 7 days with activity - Keep going!',
+                'todays-meals': "Today's Meals",
+                'meal-breakfast': 'Breakfast',
+                'meal-breakfast-desc': 'Oatmeal with berries, coffee',
+                'meal-lunch': 'Lunch',
+                'meal-lunch-desc': 'Chicken salad, whole grain bread',
+                'meal-snack': 'Snack',
+                'meal-snack-desc': 'Apple, almonds',
+                'meal-dinner': 'Dinner',
+                'meal-dinner-desc': 'Grilled salmon, vegetables, brown rice',
+                'total-calories': 'Total Calories:',
+                'sleep-analysis': 'Sleep Analysis',
+                'sleep-bedtime': 'Bedtime: 11:00 PM',
+                'sleep-wakeup': 'Wake up: 6:30 AM',
+                'sleep-duration': 'Duration',
+                'sleep-quality': 'Quality',
+                'sleep-efficiency': 'Efficiency',
+                'exercise-log': 'Exercise Log',
+                'exercise-running': 'Morning Run',
+                'exercise-running-desc': '5.2 km in 32 minutes',
+                'exercise-yoga': 'Yoga Session',
+                'exercise-yoga-desc': '30 minutes - Flexibility',
+                'exercise-cycling': 'Evening Cycling',
+                'exercise-cycling-desc': '12 km in 45 minutes',
+                'calories-burned': 'Calories Burned:'
+            },
+            ja: {
+                'page-title': '健康概要 - LifeOS AI',
+                'back-to-dashboard': 'ダッシュボードに戻る',
+                'header-title': '💪 健康概要',
+                'header-subtitle': 'ウェルネスの旅を追跡',
+                'overall-score': '総合健康スコア',
+                'status-excellent': '優秀',
+                'score-description': '素晴らしいです！健康的な習慣を続けましょう。',
+                'steps-today': '本日の歩数',
+                'steps-goal': '目標: 10,000歩',
+                'heart-rate': '心拍数',
+                'resting-hr': '安静時心拍数',
+                'water-intake': '水分摂取',
+                'water-goal': '目標: 8カップ',
+                'weight': '体重',
+                'weight-change': '今週 -0.5kg',
+                'weekly-activity': '週間アクティビティ',
+                'day-mon': '月',
+                'day-tue': '火',
+                'day-wed': '水',
+                'day-thu': '木',
+                'day-fri': '金',
+                'day-sat': '土',
+                'day-sun': '日',
+                'activity-summary': '7日中4日運動 - 頑張りましょう！',
+                'todays-meals': '本日の食事',
+                'meal-breakfast': '朝食',
+                'meal-breakfast-desc': 'オートミールとベリー、コーヒー',
+                'meal-lunch': '昼食',
+                'meal-lunch-desc': 'チキンサラダ、全粒粉パン',
+                'meal-snack': '間食',
+                'meal-snack-desc': 'リンゴ、アーモンド',
+                'meal-dinner': '夕食',
+                'meal-dinner-desc': 'グリルサーモン、野菜、玄米',
+                'total-calories': '総カロリー:',
+                'sleep-analysis': '睡眠分析',
+                'sleep-bedtime': '就寝: 午後11:00',
+                'sleep-wakeup': '起床: 午前6:30',
+                'sleep-duration': '時間',
+                'sleep-quality': '質',
+                'sleep-efficiency': '効率',
+                'exercise-log': '運動記録',
+                'exercise-running': '朝のランニング',
+                'exercise-running-desc': '5.2km を32分',
+                'exercise-yoga': 'ヨガセッション',
+                'exercise-yoga-desc': '30分 - 柔軟性',
+                'exercise-cycling': '夕方のサイクリング',
+                'exercise-cycling-desc': '12km を45分',
+                'calories-burned': '消費カロリー:'
+            }
+        };
+
+        // Get current language
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        // Update content
+        function updateContent(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if (element.tagName === 'TITLE') {
+                        document.title = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Language toggle
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                updateContent(this.getAttribute('data-lang'));
+            });
+        });
+
+        // Initialize
+        updateContent(currentLang);
+    </script>
+</body>
+</html>
