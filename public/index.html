@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LifeOS AI - Your Personal Operating System for a Better Life</title>
+    <title data-i18n="page-title">LifeOS AI - Your Personal Operating System for a Better Life</title>
     <meta name="description" content="Organize health, money, work, and well-being in one place. Built for everyday life, not pressure.">
     <style>
         * {
@@ -28,6 +28,33 @@
             line-height: 1.6;
             color: var(--text-dark);
             background: var(--white);
+        }
+
+        /* Language Toggle */
+        .lang-toggle {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 2px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .lang-btn:hover {
+            border-color: var(--secondary-color);
         }
 
         /* Header */
@@ -56,6 +83,12 @@
             font-size: 1.5rem;
             font-weight: 600;
             color: var(--primary-color);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
         }
 
         .nav-links {
@@ -290,6 +323,11 @@
             .nav-links {
                 gap: 1rem;
             }
+
+            .nav-right {
+                flex-direction: column;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
@@ -297,26 +335,32 @@
     <header>
         <nav class="container">
             <div class="logo">LifeOS AI</div>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#signup">Get Started</a></li>
-            </ul>
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#features" data-i18n="nav-features">Features</a></li>
+                    <li><a href="#pricing" data-i18n="nav-pricing">Pricing</a></li>
+                    <li><a href="#signup" data-i18n="nav-start">Get Started</a></li>
+                </ul>
+                <div class="lang-toggle">
+                    <button class="lang-btn" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="ja">日本語</button>
+                </div>
+            </div>
         </nav>
     </header>
 
     <section class="hero">
         <div class="container">
-            <h1>The Personal Operating System<br>for a Better Life</h1>
-            <p>Organize health, money, work, and well-being in one place. Built for everyday life, not pressure.</p>
-            <a href="#signup" class="cta-button">Try Free Life Overview</a>
+            <h1 data-i18n="hero-title">The Personal Operating System<br>for a Better Life</h1>
+            <p data-i18n="hero-subtitle">Organize health, money, work, and well-being in one place. Built for everyday life, not pressure.</p>
+            <a href="#signup" class="cta-button" data-i18n="hero-cta">Try Free Life Overview</a>
         </div>
     </section>
 
     <section class="section" id="features">
         <div class="container">
-            <h2 class="section-title">Everything in One Place</h2>
-            <p style="text-align: center; max-width: 700px; margin: 0 auto; color: var(--text-light);">
+            <h2 class="section-title" data-i18n="features-title">Everything in One Place</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto; color: var(--text-light);" data-i18n="features-subtitle">
                 Most life apps focus on one thing. Money. Health. Work. But life is everything at once.
                 LifeOS AI brings it together.
             </p>
@@ -324,23 +368,23 @@
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">💪</div>
-                    <h3>Health Habits</h3>
-                    <p>Track exercise, sleep, nutrition, and mental well-being in one unified dashboard.</p>
+                    <h3 data-i18n="feature-health-title">Health Habits</h3>
+                    <p data-i18n="feature-health-desc">Track exercise, sleep, nutrition, and mental well-being in one unified dashboard.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">💰</div>
-                    <h3>Personal Finances</h3>
-                    <p>Monitor spending, savings, investments, and financial goals with clarity.</p>
+                    <h3 data-i18n="feature-finance-title">Personal Finances</h3>
+                    <p data-i18n="feature-finance-desc">Monitor spending, savings, investments, and financial goals with clarity.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">💼</div>
-                    <h3>Work Stability</h3>
-                    <p>Manage career development, skills, and professional growth in one place.</p>
+                    <h3 data-i18n="feature-career-title">Work Stability</h3>
+                    <p data-i18n="feature-career-desc">Manage career development, skills, and professional growth in one place.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🧘</div>
-                    <h3>Daily Calm</h3>
-                    <p>Reduce stress with AI-guided insights and practical next steps.</p>
+                    <h3 data-i18n="feature-calm-title">Daily Calm</h3>
+                    <p data-i18n="feature-calm-desc">Reduce stress with AI-guided insights and practical next steps.</p>
                 </div>
             </div>
         </div>
@@ -348,58 +392,58 @@
 
     <section class="section pricing" id="pricing">
         <div class="container">
-            <h2 class="section-title">Choose Your Plan</h2>
+            <h2 class="section-title" data-i18n="pricing-title">Choose Your Plan</h2>
             <div class="pricing-grid">
                 <div class="pricing-card">
-                    <div class="plan-name">Life Overview</div>
-                    <div class="plan-price">Free</div>
-                    <div class="plan-period">Forever</div>
+                    <div class="plan-name" data-i18n="plan-free-name">Life Overview</div>
+                    <div class="plan-price" data-i18n="plan-free-price">Free</div>
+                    <div class="plan-period" data-i18n="plan-free-period">Forever</div>
                     <ul class="plan-features">
-                        <li>Unified life dashboard</li>
-                        <li>Health & wealth tracking</li>
-                        <li>Career overview</li>
-                        <li>Basic insights</li>
+                        <li data-i18n="plan-free-feat1">Unified life dashboard</li>
+                        <li data-i18n="plan-free-feat2">Health & wealth tracking</li>
+                        <li data-i18n="plan-free-feat3">Career overview</li>
+                        <li data-i18n="plan-free-feat4">Basic insights</li>
                     </ul>
-                    <a href="#signup" class="cta-button">Get Started</a>
+                    <a href="#signup" class="cta-button" data-i18n="plan-free-cta">Get Started</a>
                 </div>
 
                 <div class="pricing-card featured">
-                    <div class="plan-name">Daily Guidance</div>
+                    <div class="plan-name" data-i18n="plan-plus-name">Daily Guidance</div>
                     <div class="plan-price">$19</div>
-                    <div class="plan-period">per month</div>
+                    <div class="plan-period" data-i18n="plan-plus-period">per month</div>
                     <ul class="plan-features">
-                        <li>Everything in Free</li>
-                        <li>AI-driven weekly actions</li>
-                        <li>Monthly planning</li>
-                        <li>Priority support</li>
+                        <li data-i18n="plan-plus-feat1">Everything in Free</li>
+                        <li data-i18n="plan-plus-feat2">AI-driven weekly actions</li>
+                        <li data-i18n="plan-plus-feat3">Monthly planning</li>
+                        <li data-i18n="plan-plus-feat4">Priority support</li>
                     </ul>
-                    <a href="#signup" class="cta-button">Start Trial</a>
+                    <a href="#signup" class="cta-button" data-i18n="plan-plus-cta">Start Trial</a>
                 </div>
 
                 <div class="pricing-card">
-                    <div class="plan-name">Future Outlook</div>
+                    <div class="plan-name" data-i18n="plan-complete-name">Future Outlook</div>
                     <div class="plan-price">$39</div>
-                    <div class="plan-period">per month</div>
+                    <div class="plan-period" data-i18n="plan-complete-period">per month</div>
                     <ul class="plan-features">
-                        <li>Everything in Plus</li>
-                        <li>5-year trend simulation</li>
-                        <li>Detailed reports</li>
-                        <li>Advanced AI insights</li>
+                        <li data-i18n="plan-complete-feat1">Everything in Plus</li>
+                        <li data-i18n="plan-complete-feat2">5-year trend simulation</li>
+                        <li data-i18n="plan-complete-feat3">Detailed reports</li>
+                        <li data-i18n="plan-complete-feat4">Advanced AI insights</li>
                     </ul>
-                    <a href="#signup" class="cta-button">Start Trial</a>
+                    <a href="#signup" class="cta-button" data-i18n="plan-complete-cta">Start Trial</a>
                 </div>
 
                 <div class="pricing-card">
-                    <div class="plan-name">Coaching</div>
+                    <div class="plan-name" data-i18n="plan-coaching-name">Coaching</div>
                     <div class="plan-price">$99</div>
-                    <div class="plan-period">per session</div>
+                    <div class="plan-period" data-i18n="plan-coaching-period">per session</div>
                     <ul class="plan-features">
-                        <li>One-on-one AI guidance</li>
-                        <li>Personalized strategy</li>
-                        <li>Custom action plans</li>
-                        <li>Deep-dive analysis</li>
+                        <li data-i18n="plan-coaching-feat1">One-on-one AI guidance</li>
+                        <li data-i18n="plan-coaching-feat2">Personalized strategy</li>
+                        <li data-i18n="plan-coaching-feat3">Custom action plans</li>
+                        <li data-i18n="plan-coaching-feat4">Deep-dive analysis</li>
                     </ul>
-                    <a href="#signup" class="cta-button">Book Session</a>
+                    <a href="#signup" class="cta-button" data-i18n="plan-coaching-cta">Book Session</a>
                 </div>
             </div>
         </div>
@@ -407,26 +451,26 @@
 
     <section class="signup-section" id="signup">
         <div class="container">
-            <h2 class="section-title">Start Your Free Life Overview</h2>
-            <p style="color: var(--text-light); margin-bottom: 2rem;">
+            <h2 class="section-title" data-i18n="signup-title">Start Your Free Life Overview</h2>
+            <p style="color: var(--text-light); margin-bottom: 2rem;" data-i18n="signup-subtitle">
                 No credit card required. See everything in one place.
             </p>
 
             <form class="signup-form" id="signupForm">
                 <div class="form-group">
-                    <label for="name">Full Name</label>
+                    <label for="name" data-i18n="form-name">Full Name</label>
                     <input type="text" id="name" name="name" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email Address</label>
+                    <label for="email" data-i18n="form-email">Email Address</label>
                     <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password" data-i18n="form-password">Password</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                <button type="submit" class="cta-button" style="width: 100%;">Create Free Account</button>
-                <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-light);">
+                <button type="submit" class="cta-button" style="width: 100%;" data-i18n="form-submit">Create Free Account</button>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--text-light);" data-i18n="form-note">
                     Early users get special pricing on premium plans
                 </p>
             </form>
@@ -435,29 +479,196 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2025 LifeOS AI. All rights reserved.</p>
-            <p style="margin-top: 0.5rem;">Built for clarity, calm, and long-term well-being.</p>
+            <p data-i18n="footer-copyright">&copy; 2025 LifeOS AI. All rights reserved.</p>
+            <p style="margin-top: 0.5rem;" data-i18n="footer-tagline">Built for clarity, calm, and long-term well-being.</p>
         </div>
     </footer>
 
     <script>
+        // Translation data
+        const translations = {
+            en: {
+                'page-title': 'LifeOS AI - Your Personal Operating System for a Better Life',
+                'nav-features': 'Features',
+                'nav-pricing': 'Pricing',
+                'nav-start': 'Get Started',
+                'hero-title': 'The Personal Operating System<br>for a Better Life',
+                'hero-subtitle': 'Organize health, money, work, and well-being in one place. Built for everyday life, not pressure.',
+                'hero-cta': 'Try Free Life Overview',
+                'features-title': 'Everything in One Place',
+                'features-subtitle': 'Most life apps focus on one thing. Money. Health. Work. But life is everything at once. LifeOS AI brings it together.',
+                'feature-health-title': 'Health Habits',
+                'feature-health-desc': 'Track exercise, sleep, nutrition, and mental well-being in one unified dashboard.',
+                'feature-finance-title': 'Personal Finances',
+                'feature-finance-desc': 'Monitor spending, savings, investments, and financial goals with clarity.',
+                'feature-career-title': 'Work Stability',
+                'feature-career-desc': 'Manage career development, skills, and professional growth in one place.',
+                'feature-calm-title': 'Daily Calm',
+                'feature-calm-desc': 'Reduce stress with AI-guided insights and practical next steps.',
+                'pricing-title': 'Choose Your Plan',
+                'plan-free-name': 'Life Overview',
+                'plan-free-price': 'Free',
+                'plan-free-period': 'Forever',
+                'plan-free-feat1': 'Unified life dashboard',
+                'plan-free-feat2': 'Health & wealth tracking',
+                'plan-free-feat3': 'Career overview',
+                'plan-free-feat4': 'Basic insights',
+                'plan-free-cta': 'Get Started',
+                'plan-plus-name': 'Daily Guidance',
+                'plan-plus-period': 'per month',
+                'plan-plus-feat1': 'Everything in Free',
+                'plan-plus-feat2': 'AI-driven weekly actions',
+                'plan-plus-feat3': 'Monthly planning',
+                'plan-plus-feat4': 'Priority support',
+                'plan-plus-cta': 'Start Trial',
+                'plan-complete-name': 'Future Outlook',
+                'plan-complete-period': 'per month',
+                'plan-complete-feat1': 'Everything in Plus',
+                'plan-complete-feat2': '5-year trend simulation',
+                'plan-complete-feat3': 'Detailed reports',
+                'plan-complete-feat4': 'Advanced AI insights',
+                'plan-complete-cta': 'Start Trial',
+                'plan-coaching-name': 'Coaching',
+                'plan-coaching-period': 'per session',
+                'plan-coaching-feat1': 'One-on-one AI guidance',
+                'plan-coaching-feat2': 'Personalized strategy',
+                'plan-coaching-feat3': 'Custom action plans',
+                'plan-coaching-feat4': 'Deep-dive analysis',
+                'plan-coaching-cta': 'Book Session',
+                'signup-title': 'Start Your Free Life Overview',
+                'signup-subtitle': 'No credit card required. See everything in one place.',
+                'form-name': 'Full Name',
+                'form-email': 'Email Address',
+                'form-password': 'Password',
+                'form-submit': 'Create Free Account',
+                'form-note': 'Early users get special pricing on premium plans',
+                'footer-copyright': '© 2025 LifeOS AI. All rights reserved.',
+                'footer-tagline': 'Built for clarity, calm, and long-term well-being.'
+            },
+            ja: {
+                'page-title': 'LifeOS AI - より良い人生のためのパーソナルOS',
+                'nav-features': '機能',
+                'nav-pricing': '料金プラン',
+                'nav-start': '始める',
+                'hero-title': 'より良い人生のための<br>パーソナルOS',
+                'hero-subtitle': '健康・お金・仕事・ウェルビーイングを一箇所で管理。プレッシャーではなく、日常生活のために作られました。',
+                'hero-cta': '無料ライフ概要を試す',
+                'features-title': 'すべてが一箇所に',
+                'features-subtitle': 'ほとんどのアプリは一つのことに焦点を当てています。お金。健康。仕事。しかし人生はすべてが同時進行です。LifeOS AIがそれらをまとめます。',
+                'feature-health-title': '健康習慣',
+                'feature-health-desc': '運動、睡眠、栄養、メンタルヘルスを統合ダッシュボードで追跡',
+                'feature-finance-title': '個人の財務',
+                'feature-finance-desc': '支出、貯蓄、投資、財務目標を明確に監視',
+                'feature-career-title': '仕事の安定',
+                'feature-career-desc': 'キャリア開発、スキル、専門的成長を一箇所で管理',
+                'feature-calm-title': '日々の穏やかさ',
+                'feature-calm-desc': 'AIガイドによる洞察と実践的な次のステップでストレスを軽減',
+                'pricing-title': 'プランを選択',
+                'plan-free-name': 'ライフ概要',
+                'plan-free-price': '無料',
+                'plan-free-period': '永久無料',
+                'plan-free-feat1': '統合ライフダッシュボード',
+                'plan-free-feat2': '健康＆資産トラッキング',
+                'plan-free-feat3': 'キャリア概要',
+                'plan-free-feat4': '基本的な洞察',
+                'plan-free-cta': '始める',
+                'plan-plus-name': 'デイリーガイダンス',
+                'plan-plus-period': '月額',
+                'plan-plus-feat1': '無料版のすべて',
+                'plan-plus-feat2': 'AI駆動の週次アクション',
+                'plan-plus-feat3': '月次プランニング',
+                'plan-plus-feat4': '優先サポート',
+                'plan-plus-cta': 'トライアル開始',
+                'plan-complete-name': 'フューチャー展望',
+                'plan-complete-period': '月額',
+                'plan-complete-feat1': 'プラス版のすべて',
+                'plan-complete-feat2': '5年間トレンドシミュレーション',
+                'plan-complete-feat3': '詳細レポート',
+                'plan-complete-feat4': '高度なAI洞察',
+                'plan-complete-cta': 'トライアル開始',
+                'plan-coaching-name': 'コーチング',
+                'plan-coaching-period': 'セッションごと',
+                'plan-coaching-feat1': 'マンツーマンAIガイダンス',
+                'plan-coaching-feat2': 'パーソナライズ戦略',
+                'plan-coaching-feat3': 'カスタムアクションプラン',
+                'plan-coaching-feat4': '深掘り分析',
+                'plan-coaching-cta': 'セッション予約',
+                'signup-title': '無料ライフ概要を始める',
+                'signup-subtitle': 'クレジットカード不要。すべてを一箇所で確認。',
+                'form-name': '氏名',
+                'form-email': 'メールアドレス',
+                'form-password': 'パスワード',
+                'form-submit': '無料アカウント作成',
+                'form-note': 'アーリーユーザーはプレミアムプランで特別価格',
+                'footer-copyright': '© 2025 LifeOS AI. All rights reserved.',
+                'footer-tagline': '明確さ、穏やかさ、長期的なウェルビーイングのために構築。'
+            }
+        };
+
+        // Get current language from localStorage or default to English
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        // Function to update page content
+        function updateContent(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+
+            // Update title
+            const titleKey = document.querySelector('title').getAttribute('data-i18n');
+            if (titleKey && translations[lang][titleKey]) {
+                document.title = translations[lang][titleKey];
+            }
+
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Language toggle functionality
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                updateContent(lang);
+            });
+        });
+
+        // Form submission
         document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const formData = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
-                password: document.getElementById('password').value
+                password: document.getElementById('password').value,
+                language: currentLang
             };
 
-            // TODO: Send to backend API
             console.log('Signup data:', formData);
-            alert('Thank you for signing up! Your free Life Overview is being prepared.');
+            const message = currentLang === 'ja'
+                ? 'ご登録ありがとうございます！無料ライフ概要を準備中です。'
+                : 'Thank you for signing up! Your free Life Overview is being prepared.';
+            alert(message);
 
-            // Reset form
             this.reset();
         });
 
-        // Smooth scrolling for anchor links
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -470,6 +681,9 @@
                 }
             });
         });
+
+        // Initialize with saved language
+        updateContent(currentLang);
     </script>
 </body>
 </html>

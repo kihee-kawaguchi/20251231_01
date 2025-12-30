@@ -46,31 +46,7 @@
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary-color);
-            margin-bottom: 2rem;
-        }
-
-        .lang-toggle {
-            padding: 0 2rem;
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .lang-btn {
-            flex: 1;
-            background: transparent;
-            border: 1px solid var(--border);
-            padding: 0.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-
-        .lang-btn.active {
-            background: var(--primary-color);
-            color: var(--white);
-            border-color: var(--primary-color);
+            margin-bottom: 3rem;
         }
 
         .nav-menu {
@@ -256,24 +232,20 @@
 <body>
     <aside class="sidebar">
         <div class="logo">LifeOS AI</div>
-        <div class="lang-toggle">
-            <button class="lang-btn" data-lang="en">EN</button>
-            <button class="lang-btn" data-lang="ja">日本語</button>
-        </div>
         <ul class="nav-menu">
-            <li class="nav-item active" data-i18n="nav-dashboard">📊 Dashboard</li>
-            <li class="nav-item" data-i18n="nav-health">💪 Health</li>
-            <li class="nav-item" data-i18n="nav-finance">💰 Finance</li>
-            <li class="nav-item" data-i18n="nav-career">💼 Career</li>
-            <li class="nav-item" data-i18n="nav-wellbeing">🧘 Well-being</li>
-            <li class="nav-item" data-i18n="nav-settings">⚙️ Settings</li>
+            <li class="nav-item active">📊 Dashboard</li>
+            <li class="nav-item">💪 Health</li>
+            <li class="nav-item">💰 Finance</li>
+            <li class="nav-item">💼 Career</li>
+            <li class="nav-item">🧘 Well-being</li>
+            <li class="nav-item">⚙️ Settings</li>
         </ul>
     </aside>
 
     <main class="main-content">
         <div class="header">
-            <h1 data-i18n="header-welcome">Welcome back, User</h1>
-            <p data-i18n="header-subtitle">Here's your life overview for today</p>
+            <h1>Welcome back, User</h1>
+            <p>Here's your life overview for today</p>
         </div>
 
         <div class="dashboard-grid">
@@ -411,63 +383,6 @@
     </main>
 
     <script>
-        // i18n translations
-        const translations = {
-            en: {
-                'nav-dashboard': '📊 Dashboard',
-                'nav-health': '💪 Health',
-                'nav-finance': '💰 Finance',
-                'nav-career': '💼 Career',
-                'nav-wellbeing': '🧘 Well-being',
-                'nav-settings': '⚙️ Settings',
-                'header-welcome': 'Welcome back, User',
-                'header-subtitle': "Here's your life overview for today"
-            },
-            ja: {
-                'nav-dashboard': '📊 ダッシュボード',
-                'nav-health': '💪 健康',
-                'nav-finance': '💰 財務',
-                'nav-career': '💼 キャリア',
-                'nav-wellbeing': '🧘 ウェルビーイング',
-                'nav-settings': '⚙️ 設定',
-                'header-welcome': 'おかえりなさい',
-                'header-subtitle': '本日のライフ概要です'
-            }
-        };
-
-        // Get current language
-        let currentLang = localStorage.getItem('lang') || 'en';
-
-        // Update content function
-        function updateContent(lang) {
-            currentLang = lang;
-            localStorage.setItem('lang', lang);
-
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (translations[lang][key]) {
-                    element.textContent = translations[lang][key];
-                }
-            });
-
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-lang') === lang) {
-                    btn.classList.add('active');
-                }
-            });
-        }
-
-        // Language toggle
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                updateContent(this.getAttribute('data-lang'));
-            });
-        });
-
-        // Initialize language
-        updateContent(currentLang);
-
         // Simulate real-time updates
         setInterval(() => {
             // This could fetch real data from an API
