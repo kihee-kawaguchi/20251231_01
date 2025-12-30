@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page-title">Finance Overview - LifeOS AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2C5F7F;
+            --secondary-color: #5A9BC6;
+            --text-dark: #2C3E50;
+            --text-light: #6C7A89;
+            --bg-light: #F8F9FA;
+            --white: #FFFFFF;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --income: #4CAF50;
+            --expense: #F44336;
+            --border: #E0E0E0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 2px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .back-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-card h3 {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-card .amount {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-card.income .amount {
+            color: var(--income);
+        }
+
+        .summary-card.expense .amount {
+            color: var(--expense);
+        }
+
+        .summary-card.balance .amount {
+            color: var(--primary-color);
+        }
+
+        .summary-card .change {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .change.positive {
+            color: var(--success);
+        }
+
+        .change.negative {
+            color: var(--danger);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .widget {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .widget-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .expense-list {
+            list-style: none;
+        }
+
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+
+        .expense-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .expense-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .expense-icon.food { background: #FFE0B2; }
+        .expense-icon.transport { background: #BBDEFB; }
+        .expense-icon.utilities { background: #C8E6C9; }
+        .expense-icon.entertainment { background: #F8BBD0; }
+        .expense-icon.shopping { background: #D1C4E9; }
+
+        .expense-details h4 {
+            margin-bottom: 0.2rem;
+        }
+
+        .expense-details p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .expense-amount {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .chart-container {
+            height: 300px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--secondary-color), var(--primary-color));
+            border-radius: 8px 8px 0 0;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .bill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .bill-info h4 {
+            margin-bottom: 0.3rem;
+        }
+
+        .bill-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .bill-amount {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .status-due-soon {
+            background: #FFF3E0;
+            color: var(--warning);
+        }
+
+        .status-paid {
+            background: #E8F5E9;
+            color: var(--success);
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="dashboard.html" class="back-link">← <span data-i18n="back-to-dashboard">Back to Dashboard</span></a>
+
+        <div class="header">
+            <div>
+                <h1 data-i18n="header-title">💰 Finance Overview</h1>
+                <p data-i18n="header-subtitle">Manage your money with clarity</p>
+            </div>
+            <div class="lang-toggle">
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ja">日本語</button>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card income">
+                <h3 data-i18n="monthly-income">Monthly Income</h3>
+                <div class="amount">$5,420</div>
+                <div class="change positive">
+                    ↗ <span data-i18n="vs-last-month">+8% vs last month</span>
+                </div>
+            </div>
+
+            <div class="summary-card expense">
+                <h3 data-i18n="monthly-expenses">Monthly Expenses</h3>
+                <div class="amount">$3,240</div>
+                <div class="change negative">
+                    ↘ <span data-i18n="vs-last-month-exp">+12% vs last month</span>
+                </div>
+            </div>
+
+            <div class="summary-card balance">
+                <h3 data-i18n="net-balance">Net Balance</h3>
+                <div class="amount">$2,180</div>
+                <div class="change positive">
+                    ↗ <span data-i18n="savings-rate">40% savings rate</span>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <h3 data-i18n="total-savings">Total Savings</h3>
+                <div class="amount" style="color: var(--success);">$24,680</div>
+                <div class="change positive">
+                    ↗ <span data-i18n="goal-progress">68% of goal</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <!-- Expense Breakdown -->
+            <div class="widget">
+                <div class="widget-title">
+                    <span data-i18n="expense-breakdown">Expense Breakdown</span>
+                    <span style="font-size: 1rem; color: var(--text-light);" data-i18n="this-month">This Month</span>
+                </div>
+
+                <div class="chart-container">
+                    <div class="bar" style="height: 80%;">
+                        <span class="bar-value">$720</span>
+                        <span class="bar-label" data-i18n="cat-food">Food</span>
+                    </div>
+                    <div class="bar" style="height: 50%;">
+                        <span class="bar-value">$450</span>
+                        <span class="bar-label" data-i18n="cat-transport">Transport</span>
+                    </div>
+                    <div class="bar" style="height: 65%;">
+                        <span class="bar-value">$585</span>
+                        <span class="bar-label" data-i18n="cat-utilities">Utilities</span>
+                    </div>
+                    <div class="bar" style="height: 40%;">
+                        <span class="bar-value">$360</span>
+                        <span class="bar-label" data-i18n="cat-entertainment">Entertainment</span>
+                    </div>
+                    <div class="bar" style="height: 90%;">
+                        <span class="bar-value">$810</span>
+                        <span class="bar-label" data-i18n="cat-shopping">Shopping</span>
+                    </div>
+                    <div class="bar" style="height: 35%;">
+                        <span class="bar-value">$315</span>
+                        <span class="bar-label" data-i18n="cat-other">Other</span>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 4rem; margin-bottom: 1rem;" data-i18n="recent-transactions">Recent Transactions</h3>
+                <ul class="expense-list">
+                    <li class="expense-item">
+                        <div class="expense-info">
+                            <div class="expense-icon food">🍔</div>
+                            <div class="expense-details">
+                                <h4 data-i18n="tx-grocery">Grocery Shopping</h4>
+                                <p data-i18n="tx-grocery-desc">Whole Foods Market</p>
+                            </div>
+                        </div>
+                        <div class="expense-amount">-$142.50</div>
+                    </li>
+                    <li class="expense-item">
+                        <div class="expense-info">
+                            <div class="expense-icon transport">🚗</div>
+                            <div class="expense-details">
+                                <h4 data-i18n="tx-gas">Gas Station</h4>
+                                <p data-i18n="tx-gas-desc">Shell - Downtown</p>
+                            </div>
+                        </div>
+                        <div class="expense-amount">-$65.00</div>
+                    </li>
+                    <li class="expense-item">
+                        <div class="expense-info">
+                            <div class="expense-icon utilities">💡</div>
+                            <div class="expense-details">
+                                <h4 data-i18n="tx-electric">Electricity Bill</h4>
+                                <p data-i18n="tx-electric-desc">Monthly payment</p>
+                            </div>
+                        </div>
+                        <div class="expense-amount">-$135.80</div>
+                    </li>
+                    <li class="expense-item">
+                        <div class="expense-info">
+                            <div class="expense-icon entertainment">🎬</div>
+                            <div class="expense-details">
+                                <h4 data-i18n="tx-netflix">Netflix Subscription</h4>
+                                <p data-i18n="tx-netflix-desc">Monthly subscription</p>
+                            </div>
+                        </div>
+                        <div class="expense-amount">-$15.99</div>
+                    </li>
+                    <li class="expense-item">
+                        <div class="expense-info">
+                            <div class="expense-icon shopping">👕</div>
+                            <div class="expense-details">
+                                <h4 data-i18n="tx-clothing">Clothing Store</h4>
+                                <p data-i18n="tx-clothing-desc">H&M Online</p>
+                            </div>
+                        </div>
+                        <div class="expense-amount">-$89.00</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Upcoming Bills -->
+            <div class="widget">
+                <div class="widget-title">
+                    <span data-i18n="upcoming-bills">Upcoming Bills</span>
+                </div>
+
+                <div class="bill-item">
+                    <div class="bill-info">
+                        <h4 data-i18n="bill-rent">Rent Payment</h4>
+                        <p data-i18n="bill-rent-due">Due: Jan 31, 2025</p>
+                        <span class="status-badge status-due-soon" data-i18n="status-due-soon">Due Soon</span>
+                    </div>
+                    <div class="bill-amount">$1,200</div>
+                </div>
+
+                <div class="bill-item">
+                    <div class="bill-info">
+                        <h4 data-i18n="bill-internet">Internet Bill</h4>
+                        <p data-i18n="bill-internet-due">Due: Feb 5, 2025</p>
+                        <span class="status-badge status-due-soon" data-i18n="status-due-soon2">Due Soon</span>
+                    </div>
+                    <div class="bill-amount">$79.99</div>
+                </div>
+
+                <div class="bill-item">
+                    <div class="bill-info">
+                        <h4 data-i18n="bill-phone">Phone Bill</h4>
+                        <p data-i18n="bill-phone-due">Due: Feb 10, 2025</p>
+                    </div>
+                    <div class="bill-amount">$45.00</div>
+                </div>
+
+                <div class="bill-item">
+                    <div class="bill-info">
+                        <h4 data-i18n="bill-insurance">Car Insurance</h4>
+                        <p data-i18n="bill-insurance-paid">Paid: Jan 15, 2025</p>
+                        <span class="status-badge status-paid" data-i18n="status-paid">Paid</span>
+                    </div>
+                    <div class="bill-amount" style="color: var(--text-light);">$180.00</div>
+                </div>
+
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem;" data-i18n="savings-goals">Savings Goals</h3>
+
+                <div style="margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span data-i18n="goal-emergency">Emergency Fund</span>
+                        <span style="font-weight: 700;">$24,680 / $30,000</span>
+                    </div>
+                    <div style="height: 8px; background: #E0E0E0; border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: 82%; background: var(--success);"></div>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;" data-i18n="goal-emergency-desc">82% complete - $5,320 to go</p>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span data-i18n="goal-vacation">Vacation Fund</span>
+                        <span style="font-weight: 700;">$3,200 / $8,000</span>
+                    </div>
+                    <div style="height: 8px; background: #E0E0E0; border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: 40%; background: var(--secondary-color);"></div>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;" data-i18n="goal-vacation-desc">40% complete - $4,800 to go</p>
+                </div>
+
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span data-i18n="goal-car">New Car</span>
+                        <span style="font-weight: 700;">$12,400 / $25,000</span>
+                    </div>
+                    <div style="height: 8px; background: #E0E0E0; border-radius: 4px; overflow: hidden;">
+                        <div style="height: 100%; width: 50%; background: var(--primary-color);"></div>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.5rem;" data-i18n="goal-car-desc">50% complete - $12,600 to go</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                'page-title': 'Finance Overview - LifeOS AI',
+                'back-to-dashboard': 'Back to Dashboard',
+                'header-title': '💰 Finance Overview',
+                'header-subtitle': 'Manage your money with clarity',
+                'monthly-income': 'Monthly Income',
+                'monthly-expenses': 'Monthly Expenses',
+                'net-balance': 'Net Balance',
+                'total-savings': 'Total Savings',
+                'vs-last-month': '+8% vs last month',
+                'vs-last-month-exp': '+12% vs last month',
+                'savings-rate': '40% savings rate',
+                'goal-progress': '68% of goal',
+                'expense-breakdown': 'Expense Breakdown',
+                'this-month': 'This Month',
+                'cat-food': 'Food',
+                'cat-transport': 'Transport',
+                'cat-utilities': 'Utilities',
+                'cat-entertainment': 'Entertainment',
+                'cat-shopping': 'Shopping',
+                'cat-other': 'Other',
+                'recent-transactions': 'Recent Transactions',
+                'tx-grocery': 'Grocery Shopping',
+                'tx-grocery-desc': 'Whole Foods Market',
+                'tx-gas': 'Gas Station',
+                'tx-gas-desc': 'Shell - Downtown',
+                'tx-electric': 'Electricity Bill',
+                'tx-electric-desc': 'Monthly payment',
+                'tx-netflix': 'Netflix Subscription',
+                'tx-netflix-desc': 'Monthly subscription',
+                'tx-clothing': 'Clothing Store',
+                'tx-clothing-desc': 'H&M Online',
+                'upcoming-bills': 'Upcoming Bills',
+                'bill-rent': 'Rent Payment',
+                'bill-rent-due': 'Due: Jan 31, 2025',
+                'bill-internet': 'Internet Bill',
+                'bill-internet-due': 'Due: Feb 5, 2025',
+                'bill-phone': 'Phone Bill',
+                'bill-phone-due': 'Due: Feb 10, 2025',
+                'bill-insurance': 'Car Insurance',
+                'bill-insurance-paid': 'Paid: Jan 15, 2025',
+                'status-due-soon': 'Due Soon',
+                'status-due-soon2': 'Due Soon',
+                'status-paid': 'Paid',
+                'savings-goals': 'Savings Goals',
+                'goal-emergency': 'Emergency Fund',
+                'goal-emergency-desc': '82% complete - $5,320 to go',
+                'goal-vacation': 'Vacation Fund',
+                'goal-vacation-desc': '40% complete - $4,800 to go',
+                'goal-car': 'New Car',
+                'goal-car-desc': '50% complete - $12,600 to go'
+            },
+            ja: {
+                'page-title': '財務概要 - LifeOS AI',
+                'back-to-dashboard': 'ダッシュボードに戻る',
+                'header-title': '💰 財務概要',
+                'header-subtitle': '明確にお金を管理',
+                'monthly-income': '月間収入',
+                'monthly-expenses': '月間支出',
+                'net-balance': '純残高',
+                'total-savings': '総貯蓄額',
+                'vs-last-month': '先月比 +8%',
+                'vs-last-month-exp': '先月比 +12%',
+                'savings-rate': '貯蓄率 40%',
+                'goal-progress': '目標の68%',
+                'expense-breakdown': '支出内訳',
+                'this-month': '今月',
+                'cat-food': '食費',
+                'cat-transport': '交通費',
+                'cat-utilities': '光熱費',
+                'cat-entertainment': '娯楽費',
+                'cat-shopping': '買い物',
+                'cat-other': 'その他',
+                'recent-transactions': '最近の取引',
+                'tx-grocery': '食料品の買い物',
+                'tx-grocery-desc': 'ホールフーズ',
+                'tx-gas': 'ガソリンスタンド',
+                'tx-gas-desc': 'シェル - ダウンタウン',
+                'tx-electric': '電気代',
+                'tx-electric-desc': '月次支払い',
+                'tx-netflix': 'Netflix サブスク',
+                'tx-netflix-desc': '月額サブスクリプション',
+                'tx-clothing': '衣料品店',
+                'tx-clothing-desc': 'H&M オンライン',
+                'upcoming-bills': '今後の請求',
+                'bill-rent': '家賃',
+                'bill-rent-due': '期限: 2025年1月31日',
+                'bill-internet': 'インターネット代',
+                'bill-internet-due': '期限: 2025年2月5日',
+                'bill-phone': '電話代',
+                'bill-phone-due': '期限: 2025年2月10日',
+                'bill-insurance': '自動車保険',
+                'bill-insurance-paid': '支払済: 2025年1月15日',
+                'status-due-soon': '期限間近',
+                'status-due-soon2': '期限間近',
+                'status-paid': '支払済',
+                'savings-goals': '貯蓄目標',
+                'goal-emergency': '緊急資金',
+                'goal-emergency-desc': '82%達成 - 残り$5,320',
+                'goal-vacation': '旅行資金',
+                'goal-vacation-desc': '40%達成 - 残り$4,800',
+                'goal-car': '新車購入',
+                'goal-car-desc': '50%達成 - 残り$12,600'
+            }
+        };
+
+        // Get current language
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        // Update content
+        function updateContent(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if (element.tagName === 'TITLE') {
+                        document.title = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Language toggle
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                updateContent(this.getAttribute('data-lang'));
+            });
+        });
+
+        // Initialize
+        updateContent(currentLang);
+    </script>
+</body>
+</html>
