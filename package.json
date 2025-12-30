@@ -1,0 +1,22 @@
+{
+  "name": "lifeos-ai-pa",
+  "version": "0.1.0",
+  "description": "LifeOS AI - Personal Assistant for holistic life management",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "ai",
+    "personal-assistant",
+    "life-management",
+    "health",
+    "finance",
+    "wellness"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
