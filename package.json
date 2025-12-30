@@ -2,10 +2,11 @@
   "name": "lifeos-ai-pa",
   "version": "0.1.0",
   "description": "LifeOS AI - Personal Assistant for holistic life management",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Tests coming soon\" && exit 0"
   },
   "keywords": [
     "ai",
@@ -15,8 +16,16 @@
     "finance",
     "wellness"
   ],
-  "author": "",
+  "author": "LifeOS AI Team",
   "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

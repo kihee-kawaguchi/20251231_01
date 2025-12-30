@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Dashboard - LifeOS AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2C5F7F;
+            --secondary-color: #5A9BC6;
+            --text-dark: #2C3E50;
+            --text-light: #6C7A89;
+            --bg-light: #F8F9FA;
+            --white: #FFFFFF;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --border: #E0E0E0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            padding: 2rem 0;
+        }
+
+        .logo {
+            padding: 0 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 3rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: #EBF2F7;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-light);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .widget {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .widget-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .widget-icon {
+            font-size: 2rem;
+        }
+
+        .metric {
+            margin: 1rem 0;
+        }
+
+        .metric-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #E0E0E0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-good {
+            background: #E8F5E9;
+            color: var(--success);
+        }
+
+        .status-warning {
+            background: #FFF3E0;
+            color: var(--warning);
+        }
+
+        .status-alert {
+            background: #FFEBEE;
+            color: var(--danger);
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .cta-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        .cta-button {
+            background: var(--white);
+            color: var(--primary-color);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">LifeOS AI</div>
+        <ul class="nav-menu">
+            <li class="nav-item active">📊 Dashboard</li>
+            <li class="nav-item">💪 Health</li>
+            <li class="nav-item">💰 Finance</li>
+            <li class="nav-item">💼 Career</li>
+            <li class="nav-item">🧘 Well-being</li>
+            <li class="nav-item">⚙️ Settings</li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <h1>Welcome back, User</h1>
+            <p>Here's your life overview for today</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Health Widget -->
+            <div class="widget">
+                <div class="widget-header">
+                    <h2 class="widget-title">Health</h2>
+                    <span class="widget-icon">💪</span>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Overall Health Score</div>
+                    <div class="metric-value">85/100 <span class="status-badge status-good">Good</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Weekly Activity</div>
+                    <div class="metric-value">4/5 <span style="font-size: 1rem; color: var(--text-light);">days</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 80%;"></div>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Sleep Quality</div>
+                    <div class="metric-value">7.5 <span style="font-size: 1rem; color: var(--text-light);">hours avg</span></div>
+                </div>
+            </div>
+
+            <!-- Finance Widget -->
+            <div class="widget">
+                <div class="widget-header">
+                    <h2 class="widget-title">Finance</h2>
+                    <span class="widget-icon">💰</span>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Monthly Budget</div>
+                    <div class="metric-value">$3,240 <span class="status-badge status-good">On Track</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%; background: var(--secondary-color);"></div>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Savings Goal</div>
+                    <div class="metric-value">68% <span style="font-size: 1rem; color: var(--text-light);">complete</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 68%; background: var(--success);"></div>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Upcoming Bills</div>
+                    <div class="metric-value">3 <span style="font-size: 1rem; color: var(--text-light);">this week</span></div>
+                </div>
+            </div>
+
+            <!-- Career Widget -->
+            <div class="widget">
+                <div class="widget-header">
+                    <h2 class="widget-title">Career</h2>
+                    <span class="widget-icon">💼</span>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Skills Development</div>
+                    <div class="metric-value">2/3 <span style="font-size: 1rem; color: var(--text-light);">courses</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 67%; background: var(--secondary-color);"></div>
+                    </div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Weekly Productivity</div>
+                    <div class="metric-value">92% <span class="status-badge status-good">Excellent</span></div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Next Goal Review</div>
+                    <div class="metric-value">5 <span style="font-size: 1rem; color: var(--text-light);">days</span></div>
+                </div>
+            </div>
+
+            <!-- Well-being Widget -->
+            <div class="widget">
+                <div class="widget-header">
+                    <h2 class="widget-title">Well-being</h2>
+                    <span class="widget-icon">🧘</span>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Stress Level</div>
+                    <div class="metric-value">Low <span class="status-badge status-good">Calm</span></div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Meditation Streak</div>
+                    <div class="metric-value">12 <span style="font-size: 1rem; color: var(--text-light);">days</span></div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Work-Life Balance</div>
+                    <div class="metric-value">78% <span class="status-badge status-good">Balanced</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 78%; background: var(--success);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity Widget -->
+            <div class="widget">
+                <div class="widget-header">
+                    <h2 class="widget-title">Recent Activity</h2>
+                    <span class="widget-icon">📋</span>
+                </div>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div>Completed morning workout</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </li>
+                    <li class="activity-item">
+                        <div>Paid utility bill</div>
+                        <div class="activity-time">5 hours ago</div>
+                    </li>
+                    <li class="activity-item">
+                        <div>Completed course module</div>
+                        <div class="activity-time">Yesterday</div>
+                    </li>
+                    <li class="activity-item">
+                        <div>10-minute meditation</div>
+                        <div class="activity-time">Yesterday</div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Upgrade CTA -->
+            <div class="cta-card">
+                <h3>Unlock AI Guidance</h3>
+                <p style="margin-bottom: 1.5rem;">Get personalized daily actions and 5-year future outlook</p>
+                <button class="cta-button">Upgrade to Plus - $19/mo</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Simulate real-time updates
+        setInterval(() => {
+            // This could fetch real data from an API
+            console.log('Updating dashboard metrics...');
+        }, 30000);
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
