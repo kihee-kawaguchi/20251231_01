@@ -32,6 +32,68 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-light);
             color: var(--text-dark);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            padding: 2rem 0;
+        }
+
+        .logo {
+            padding: 0 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .lang-toggle {
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: #EBF2F7;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .main-content {
+            margin-left: 250px;
             padding: 2rem;
         }
 
@@ -46,48 +108,16 @@
             border-radius: 12px;
             margin-bottom: 2rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .header h1 {
             font-size: 2rem;
             color: var(--primary-color);
+            margin-bottom: 0.5rem;
         }
 
-        .lang-toggle {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .lang-btn {
-            background: transparent;
-            border: 2px solid var(--border);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .lang-btn.active {
-            background: var(--primary-color);
-            color: var(--white);
-            border-color: var(--primary-color);
-        }
-
-        .back-link {
-            color: var(--secondary-color);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
+        .header p {
+            color: var(--text-light);
         }
 
         /* Health Score Circle */
@@ -324,6 +354,16 @@
         }
 
         @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
             .metrics-grid {
                 grid-template-columns: 1fr;
             }
@@ -335,19 +375,28 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="dashboard.html" class="back-link">← <span data-i18n="back-to-dashboard">Back to Dashboard</span></a>
+    <aside class="sidebar">
+        <div class="logo">LifeOS AI</div>
+        <div class="lang-toggle">
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="ja">日本語</button>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item" data-i18n="nav-dashboard" onclick="location.href='dashboard.html'">📊 Dashboard</li>
+            <li class="nav-item active" data-i18n="nav-health">💪 Health</li>
+            <li class="nav-item" data-i18n="nav-finance" onclick="location.href='finance.html'">💰 Finance</li>
+            <li class="nav-item" data-i18n="nav-career" onclick="location.href='career.html'">💼 Career</li>
+            <li class="nav-item" data-i18n="nav-wellbeing" onclick="location.href='wellbeing.html'">🧘 Well-being</li>
+            <li class="nav-item" data-i18n="nav-settings" onclick="location.href='settings.html'">⚙️ Settings</li>
+        </ul>
+    </aside>
 
-        <div class="header">
-            <div>
+    <main class="main-content">
+        <div class="container">
+            <div class="header">
                 <h1 data-i18n="header-title">💪 Health Overview</h1>
                 <p data-i18n="header-subtitle">Track your wellness journey</p>
             </div>
-            <div class="lang-toggle">
-                <button class="lang-btn" data-lang="en">EN</button>
-                <button class="lang-btn" data-lang="ja">日本語</button>
-            </div>
-        </div>
 
         <!-- Overall Health Score -->
         <div class="health-score-container">
@@ -562,13 +611,20 @@
                 <span style="font-size: 1rem; color: var(--text-light);"> cal</span>
             </div>
         </div>
-    </div>
+        </div>
+    </main>
 
     <script>
         // Translations
         const translations = {
             en: {
                 'page-title': 'Health Overview - LifeOS AI',
+                'nav-dashboard': '📊 Dashboard',
+                'nav-health': '💪 Health',
+                'nav-finance': '💰 Finance',
+                'nav-career': '💼 Career',
+                'nav-wellbeing': '🧘 Well-being',
+                'nav-settings': '⚙️ Settings',
                 'back-to-dashboard': 'Back to Dashboard',
                 'header-title': '💪 Health Overview',
                 'header-subtitle': 'Track your wellness journey',
@@ -619,6 +675,12 @@
             },
             ja: {
                 'page-title': '健康概要 - LifeOS AI',
+                'nav-dashboard': '📊 ダッシュボード',
+                'nav-health': '💪 健康',
+                'nav-finance': '💰 財務',
+                'nav-career': '💼 キャリア',
+                'nav-wellbeing': '🧘 ウェルビーイング',
+                'nav-settings': '⚙️ 設定',
                 'back-to-dashboard': 'ダッシュボードに戻る',
                 'header-title': '💪 健康概要',
                 'header-subtitle': 'ウェルネスの旅を追跡',
