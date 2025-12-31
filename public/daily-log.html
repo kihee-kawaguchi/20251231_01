@@ -11,1023 +11,643 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary-color: #2C5F7F;
-            --secondary-color: #5A9BC6;
-            --text-dark: #2C3E50;
-            --text-light: #6C7A89;
-            --bg-light: #F8F9FA;
-            --white: #FFFFFF;
-            --success: #4CAF50;
-            --warning: #FF9800;
-            --danger: #F44336;
-            --border: #E0E0E0;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-light);
-            color: var(--text-dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: #FAFAFA;
+            color: #1D1D1F;
+            overflow-x: hidden;
         }
 
-        .sidebar {
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .progress-bar {
             position: fixed;
-            left: 0;
             top: 0;
-            width: 250px;
-            height: 100vh;
-            background: var(--white);
-            border-right: 1px solid var(--border);
-            padding: 2rem 0;
-            overflow-y: auto;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #F5F5F7;
+            z-index: 1000;
         }
 
-        .logo {
-            padding: 0 2rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 2rem;
+        .progress-fill {
+            height: 100%;
+            background: #000000;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .lang-toggle {
-            padding: 0 2rem;
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .lang-btn {
-            flex: 1;
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            width: 44px;
+            height: 44px;
+            border: none;
             background: transparent;
-            border: 1px solid var(--border);
-            padding: 0.5rem;
-            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-
-        .lang-btn.active {
-            background: var(--primary-color);
-            color: var(--white);
-            border-color: var(--primary-color);
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-item {
-            padding: 1rem 2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: #EBF2F7;
-            border-left: 3px solid var(--primary-color);
-        }
-
-        .main-content {
-            margin-left: 250px;
-            padding: 2rem;
-        }
-
-        .header {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .header h1 {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .header p {
-            color: var(--text-light);
-        }
-
-        .date-selector {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-top: 1rem;
-            padding: 1rem;
-            background: var(--bg-light);
-            border-radius: 8px;
+            justify-content: center;
+            opacity: 0.6;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 100;
         }
 
-        .date-selector input[type="date"] {
-            padding: 0.5rem;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 1rem;
+        .back-button:hover {
+            opacity: 1;
+            transform: translateX(-4px);
         }
 
-        .quick-date-btn {
+        .back-button svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .skip-button {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: transparent;
+            border: none;
+            color: #86868B;
+            font-size: 17px;
+            cursor: pointer;
             padding: 0.5rem 1rem;
-            background: var(--white);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
+            transition: color 0.3s;
+            z-index: 100;
         }
 
-        .quick-date-btn:hover {
-            background: var(--primary-color);
-            color: var(--white);
-            border-color: var(--primary-color);
+        .skip-button:hover {
+            color: #1D1D1F;
         }
 
-        .section-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        .question-container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-number {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            color: #86868B;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .question {
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 3rem;
+            letter-spacing: -0.5px;
+        }
+
+        .input-container {
             margin-bottom: 2rem;
         }
 
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .section-icon {
-            font-size: 1.5rem;
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .form-input {
+        .input-field {
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 1rem;
+            max-width: 400px;
+            padding: 1.5rem;
+            font-size: 32px;
+            font-weight: 500;
+            border: none;
+            border-bottom: 2px solid #D2D2D7;
+            background: transparent;
+            text-align: center;
             transition: border-color 0.3s;
-        }
-
-        .form-input:focus {
             outline: none;
-            border-color: var(--primary-color);
         }
 
-        .form-textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 1rem;
-            min-height: 100px;
-            resize: vertical;
-            font-family: inherit;
+        .input-field:focus {
+            border-color: #000000;
         }
 
-        .form-textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
-
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
+        .input-field::placeholder {
+            color: #D2D2D7;
         }
 
         .mood-selector {
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 3rem;
         }
 
-        .mood-btn {
-            width: 70px;
-            height: 70px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            background: var(--white);
-            font-size: 2.5rem;
+        .mood-button {
+            width: 80px;
+            height: 80px;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            background: #F5F5F7;
+            font-size: 40px;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .mood-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .mood-btn.selected {
-            border-color: var(--primary-color);
-            background: #EBF2F7;
-        }
-
-        .meal-entry {
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .meal-header {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            justify-content: center;
         }
 
-        .meal-title {
-            font-weight: 600;
-            color: var(--text-dark);
+        .mood-button:hover {
+            transform: scale(1.1);
+            background: #E8E8ED;
         }
 
-        .add-btn {
-            background: var(--secondary-color);
-            color: var(--white);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-
-        .add-btn:hover {
-            background: var(--primary-color);
-        }
-
-        .submit-section {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 2px solid var(--border);
-        }
-
-        .btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: var(--primary-color);
-            color: var(--white);
-        }
-
-        .btn-primary:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-secondary {
-            background: var(--border);
-            color: var(--text-dark);
-        }
-
-        .btn-secondary:hover {
-            background: #D0D0D0;
-        }
-
-        .success-message {
-            display: none;
-            background: #E8F5E9;
-            color: var(--success);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--success);
-        }
-
-        .success-message.show {
-            display: block;
-        }
-
-        .time-input-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+        .mood-button.selected {
+            border-color: #000000;
+            background: #FFFFFF;
+            transform: scale(1.15);
         }
 
         .slider-container {
-            margin-top: 0.5rem;
+            max-width: 400px;
+            margin: 0 auto 3rem;
         }
 
         .slider {
             width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: var(--border);
+            height: 6px;
+            border-radius: 3px;
+            background: #E8E8ED;
             outline: none;
             -webkit-appearance: none;
+            cursor: pointer;
         }
 
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            background: var(--primary-color);
+            background: #000000;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
         }
 
         .slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            background: var(--primary-color);
-            cursor: pointer;
+            background: #000000;
             border: none;
+            cursor: pointer;
         }
 
         .slider-value {
-            display: inline-block;
-            margin-left: 0.5rem;
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .slider-label {
+            font-size: 17px;
+            color: #86868B;
+        }
+
+        .textarea-field {
+            width: 100%;
+            max-width: 500px;
+            min-height: 120px;
+            padding: 1.5rem;
+            font-size: 20px;
+            font-family: inherit;
+            border: 2px solid #E8E8ED;
+            border-radius: 12px;
+            background: #FFFFFF;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .textarea-field:focus {
+            border-color: #000000;
+        }
+
+        .textarea-field::placeholder {
+            color: #D2D2D7;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+
+        .primary-button {
+            padding: 1rem 3rem;
+            font-size: 17px;
+            font-weight: 500;
+            border: none;
+            border-radius: 980px;
+            background: #000000;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .primary-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .primary-button:active {
+            transform: scale(0.98);
+        }
+
+        .completion-screen {
+            display: none;
+            text-align: center;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .completion-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            background: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .completion-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: #FFFFFF;
+            stroke-width: 3;
+            fill: none;
+        }
+
+        .completion-title {
+            font-size: 48px;
             font-weight: 600;
-            color: var(--primary-color);
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .completion-subtitle {
+            font-size: 21px;
+            color: #86868B;
+            margin-bottom: 3rem;
+        }
+
+        .date-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: #F5F5F7;
+            border-radius: 980px;
+            font-size: 15px;
+            color: #86868B;
+            margin-bottom: 2rem;
+        }
+
+        .hidden {
+            display: none;
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
+            .question {
+                font-size: 36px;
             }
 
-            .main-content {
-                margin-left: 0;
+            .input-field {
+                font-size: 24px;
             }
 
-            .form-grid {
-                grid-template-columns: 1fr;
+            .slider-value {
+                font-size: 42px;
             }
 
-            .submit-section {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
+            .mood-button {
+                width: 60px;
+                height: 60px;
+                font-size: 30px;
             }
         }
     </style>
 </head>
 <body>
-    <aside class="sidebar">
-        <div class="logo">LifeOS AI</div>
-        <div class="lang-toggle">
-            <button class="lang-btn" data-lang="en">EN</button>
-            <button class="lang-btn" data-lang="ja">日本語</button>
-        </div>
-        <ul class="nav-menu">
-            <li class="nav-item" data-i18n="nav-dashboard" onclick="location.href='dashboard.html'">📊 Dashboard</li>
-            <li class="nav-item active" data-i18n="nav-daily-log">✏️ Daily Log</li>
-            <li class="nav-item" data-i18n="nav-health" onclick="location.href='health.html'">💪 Health</li>
-            <li class="nav-item" data-i18n="nav-finance" onclick="location.href='finance.html'">💰 Finance</li>
-            <li class="nav-item" data-i18n="nav-career" onclick="location.href='career.html'">💼 Career</li>
-            <li class="nav-item" data-i18n="nav-wellbeing" onclick="location.href='wellbeing.html'">🧘 Well-being</li>
-            <li class="nav-item" data-i18n="nav-settings" onclick="location.href='settings.html'">⚙️ Settings</li>
-        </ul>
-    </aside>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+    </div>
 
-    <main class="main-content">
-        <div class="header">
-            <h1 data-i18n="page-title">✏️ Daily Log</h1>
-            <p data-i18n="page-subtitle">Record your daily activities and progress</p>
+    <button class="back-button hidden" id="backButton" onclick="previousQuestion()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M15 18l-6-6 6-6"/>
+        </svg>
+    </button>
 
-            <div class="date-selector">
-                <label style="font-weight: 600;" data-i18n="select-date">Select Date:</label>
-                <input type="date" id="log-date" class="form-input" style="width: auto;">
-                <button class="quick-date-btn" onclick="setToday()" data-i18n="today">Today</button>
-                <button class="quick-date-btn" onclick="setYesterday()" data-i18n="yesterday">Yesterday</button>
-            </div>
-        </div>
+    <button class="skip-button" id="skipButton" onclick="skipQuestion()">Skip</button>
 
-        <div id="success-message" class="success-message">
-            <strong data-i18n="success-title">Success!</strong>
-            <span data-i18n="success-message">Your daily log has been saved.</span>
-        </div>
-
-        <!-- Health Section -->
-        <div class="section-card">
-            <div class="section-header">
-                <span class="section-icon">💪</span>
-                <h2 class="section-title" data-i18n="health-section">Health & Fitness</h2>
-            </div>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label" data-i18n="steps">Steps</label>
-                    <input type="number" class="form-input" id="steps" placeholder="10000">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" data-i18n="weight">Weight (kg)</label>
-                    <input type="number" step="0.1" class="form-input" id="weight" placeholder="70.5">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" data-i18n="water">Water Intake (cups)</label>
-                    <input type="number" step="0.5" class="form-input" id="water" placeholder="8">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" data-i18n="heart-rate">Heart Rate (bpm)</label>
-                    <input type="number" class="form-input" id="heart-rate" placeholder="72">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="sleep-time">Sleep Time</label>
-                <div class="time-input-group">
-                    <div>
-                        <label style="font-size: 0.85rem; color: var(--text-light);" data-i18n="bedtime">Bedtime</label>
-                        <input type="time" class="form-input" id="bedtime" value="23:00">
-                    </div>
-                    <div>
-                        <label style="font-size: 0.85rem; color: var(--text-light);" data-i18n="wake-time">Wake Time</label>
-                        <input type="time" class="form-input" id="wake-time" value="07:00">
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="meals-label">Today's Meals</label>
-                <div id="meals-container">
-                    <div class="meal-entry">
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="breakfast">Breakfast</label>
-                            <input type="text" class="form-input" placeholder="Oatmeal with berries, coffee">
-                            <input type="number" class="form-input" placeholder="Calories: 350" style="margin-top: 0.5rem;">
-                        </div>
-                    </div>
-                    <div class="meal-entry">
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="lunch">Lunch</label>
-                            <input type="text" class="form-input" placeholder="Chicken salad, whole grain bread">
-                            <input type="number" class="form-input" placeholder="Calories: 550" style="margin-top: 0.5rem;">
-                        </div>
-                    </div>
-                    <div class="meal-entry">
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="dinner">Dinner</label>
-                            <input type="text" class="form-input" placeholder="Grilled salmon, vegetables">
-                            <input type="number" class="form-input" placeholder="Calories: 600" style="margin-top: 0.5rem;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="exercise-label">Exercise Activities</label>
-                <textarea class="form-textarea" id="exercise" placeholder="Morning run - 5km in 30 minutes&#10;Yoga session - 20 minutes"></textarea>
-            </div>
-        </div>
-
-        <!-- Finance Section -->
-        <div class="section-card">
-            <div class="section-header">
-                <span class="section-icon">💰</span>
-                <h2 class="section-title" data-i18n="finance-section">Finance</h2>
-            </div>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label" data-i18n="income-today">Income Today ($)</label>
-                    <input type="number" step="0.01" class="form-input" id="income" placeholder="0.00">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" data-i18n="expenses-today">Expenses Today ($)</label>
-                    <input type="number" step="0.01" class="form-input" id="expenses" placeholder="0.00">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="transactions">Transactions</label>
-                <textarea class="form-textarea" id="transactions" placeholder="Grocery shopping - $85.50&#10;Gas station - $45.00&#10;Coffee - $5.50"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="expense-category">Expense Categories</label>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="cat-food" value="food">
-                        <label for="cat-food" data-i18n="cat-food">Food</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="cat-transport" value="transport">
-                        <label for="cat-transport" data-i18n="cat-transport">Transport</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="cat-utilities" value="utilities">
-                        <label for="cat-utilities" data-i18n="cat-utilities">Utilities</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="cat-entertainment" value="entertainment">
-                        <label for="cat-entertainment" data-i18n="cat-entertainment">Entertainment</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="cat-healthcare" value="healthcare">
-                        <label for="cat-healthcare" data-i18n="cat-healthcare">Healthcare</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="cat-other" value="other">
-                        <label for="cat-other" data-i18n="cat-other">Other</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Career Section -->
-        <div class="section-card">
-            <div class="section-header">
-                <span class="section-icon">💼</span>
-                <h2 class="section-title" data-i18n="career-section">Career & Productivity</h2>
-            </div>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label" data-i18n="tasks-completed">Tasks Completed</label>
-                    <input type="number" class="form-input" id="tasks" placeholder="10">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" data-i18n="hours-worked">Hours Worked</label>
-                    <input type="number" step="0.5" class="form-input" id="hours-worked" placeholder="8">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" data-i18n="meetings-attended">Meetings Attended</label>
-                    <input type="number" class="form-input" id="meetings" placeholder="3">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" data-i18n="learning-time">Learning Time (minutes)</label>
-                    <input type="number" class="form-input" id="learning" placeholder="60">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="productivity-rating">Productivity Rating</label>
-                <div class="slider-container">
-                    <input type="range" min="0" max="100" value="50" class="slider" id="productivity-slider">
-                    <span class="slider-value" id="productivity-value">50%</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="achievements">Today's Achievements</label>
-                <textarea class="form-textarea" id="achievements" placeholder="Completed project milestone&#10;Learned new framework&#10;Helped team member"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="challenges">Challenges Faced</label>
-                <textarea class="form-textarea" id="challenges" placeholder="Debugging complex issue&#10;Time management"></textarea>
-            </div>
-        </div>
-
-        <!-- Well-being Section -->
-        <div class="section-card">
-            <div class="section-header">
-                <span class="section-icon">🧘</span>
-                <h2 class="section-title" data-i18n="wellbeing-section">Well-being & Mindfulness</h2>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="mood-today">How are you feeling today?</label>
-                <div class="mood-selector">
-                    <button class="mood-btn" data-mood="great" onclick="selectMood(this)">😊</button>
-                    <button class="mood-btn" data-mood="good" onclick="selectMood(this)">😌</button>
-                    <button class="mood-btn" data-mood="okay" onclick="selectMood(this)">😐</button>
-                    <button class="mood-btn" data-mood="down" onclick="selectMood(this)">😔</button>
-                    <button class="mood-btn" data-mood="stressed" onclick="selectMood(this)">😫</button>
-                </div>
-            </div>
-
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label" data-i18n="meditation-time">Meditation Time (minutes)</label>
-                    <input type="number" class="form-input" id="meditation" placeholder="15">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" data-i18n="stress-level">Stress Level</label>
-                    <select class="form-input" id="stress-level">
-                        <option value="low" data-i18n="stress-low">Low</option>
-                        <option value="medium" data-i18n="stress-medium">Medium</option>
-                        <option value="high" data-i18n="stress-high">High</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="mindfulness-activities">Mindfulness Activities</label>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="act-meditation" value="meditation">
-                        <label for="act-meditation" data-i18n="act-meditation">Meditation</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="act-gratitude" value="gratitude">
-                        <label for="act-gratitude" data-i18n="act-gratitude">Gratitude Journal</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="act-walk" value="walk">
-                        <label for="act-walk" data-i18n="act-walk">Mindful Walk</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="act-breathing" value="breathing">
-                        <label for="act-breathing" data-i18n="act-breathing">Deep Breathing</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="act-yoga" value="yoga">
-                        <label for="act-yoga" data-i18n="act-yoga">Yoga</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="gratitude">Gratitude - What are you grateful for today?</label>
-                <textarea class="form-textarea" id="gratitude" placeholder="Family support&#10;Good health&#10;Opportunities to learn"></textarea>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" data-i18n="reflection">Daily Reflection</label>
-                <textarea class="form-textarea" id="reflection" placeholder="What went well today? What could be improved?"></textarea>
-            </div>
-        </div>
-
-        <!-- Submit Section -->
-        <div class="submit-section">
-            <button class="btn btn-secondary" onclick="clearForm()" data-i18n="btn-clear">Clear All</button>
-            <button class="btn btn-primary" onclick="saveLog()" data-i18n="btn-save">Save Daily Log</button>
-        </div>
-    </main>
+    <div class="container" id="container">
+        <!-- Questions will be dynamically rendered here -->
+    </div>
 
     <script>
-        // i18n translations
-        const translations = {
-            en: {
-                'nav-dashboard': '📊 Dashboard',
-                'nav-daily-log': '✏️ Daily Log',
-                'nav-health': '💪 Health',
-                'nav-finance': '💰 Finance',
-                'nav-career': '💼 Career',
-                'nav-wellbeing': '🧘 Well-being',
-                'nav-settings': '⚙️ Settings',
-                'page-title': '✏️ Daily Log',
-                'page-subtitle': 'Record your daily activities and progress',
-                'select-date': 'Select Date:',
-                'today': 'Today',
-                'yesterday': 'Yesterday',
-                'success-title': 'Success!',
-                'success-message': 'Your daily log has been saved.',
-                'health-section': 'Health & Fitness',
-                'steps': 'Steps',
-                'weight': 'Weight (kg)',
-                'water': 'Water Intake (cups)',
-                'heart-rate': 'Heart Rate (bpm)',
-                'sleep-time': 'Sleep Time',
-                'bedtime': 'Bedtime',
-                'wake-time': 'Wake Time',
-                'meals-label': "Today's Meals",
-                'breakfast': 'Breakfast',
-                'lunch': 'Lunch',
-                'dinner': 'Dinner',
-                'exercise-label': 'Exercise Activities',
-                'finance-section': 'Finance',
-                'income-today': 'Income Today ($)',
-                'expenses-today': 'Expenses Today ($)',
-                'transactions': 'Transactions',
-                'expense-category': 'Expense Categories',
-                'cat-food': 'Food',
-                'cat-transport': 'Transport',
-                'cat-utilities': 'Utilities',
-                'cat-entertainment': 'Entertainment',
-                'cat-healthcare': 'Healthcare',
-                'cat-other': 'Other',
-                'career-section': 'Career & Productivity',
-                'tasks-completed': 'Tasks Completed',
-                'hours-worked': 'Hours Worked',
-                'meetings-attended': 'Meetings Attended',
-                'learning-time': 'Learning Time (minutes)',
-                'productivity-rating': 'Productivity Rating',
-                'achievements': "Today's Achievements",
-                'challenges': 'Challenges Faced',
-                'wellbeing-section': 'Well-being & Mindfulness',
-                'mood-today': 'How are you feeling today?',
-                'meditation-time': 'Meditation Time (minutes)',
-                'stress-level': 'Stress Level',
-                'stress-low': 'Low',
-                'stress-medium': 'Medium',
-                'stress-high': 'High',
-                'mindfulness-activities': 'Mindfulness Activities',
-                'act-meditation': 'Meditation',
-                'act-gratitude': 'Gratitude Journal',
-                'act-walk': 'Mindful Walk',
-                'act-breathing': 'Deep Breathing',
-                'act-yoga': 'Yoga',
-                'gratitude': 'Gratitude - What are you grateful for today?',
-                'reflection': 'Daily Reflection',
-                'btn-clear': 'Clear All',
-                'btn-save': 'Save Daily Log'
+        const questions = [
+            {
+                type: 'mood',
+                number: 'Question 1 of 8',
+                question: 'How are you feeling?',
+                key: 'mood',
+                options: ['😊', '😌', '😐', '😔', '😫']
             },
-            ja: {
-                'nav-dashboard': '📊 ダッシュボード',
-                'nav-daily-log': '✏️ 毎日の記録',
-                'nav-health': '💪 健康',
-                'nav-finance': '💰 財務',
-                'nav-career': '💼 キャリア',
-                'nav-wellbeing': '🧘 ウェルビーイング',
-                'nav-settings': '⚙️ 設定',
-                'page-title': '✏️ 毎日の記録',
-                'page-subtitle': '日々の活動と進捗を記録',
-                'select-date': '日付を選択:',
-                'today': '今日',
-                'yesterday': '昨日',
-                'success-title': '成功！',
-                'success-message': '毎日の記録が保存されました。',
-                'health-section': '健康＆フィットネス',
-                'steps': '歩数',
-                'weight': '体重 (kg)',
-                'water': '水分摂取 (カップ)',
-                'heart-rate': '心拍数 (bpm)',
-                'sleep-time': '睡眠時間',
-                'bedtime': '就寝時刻',
-                'wake-time': '起床時刻',
-                'meals-label': '今日の食事',
-                'breakfast': '朝食',
-                'lunch': '昼食',
-                'dinner': '夕食',
-                'exercise-label': '運動活動',
-                'finance-section': '財務',
-                'income-today': '今日の収入 ($)',
-                'expenses-today': '今日の支出 ($)',
-                'transactions': '取引',
-                'expense-category': '支出カテゴリ',
-                'cat-food': '食費',
-                'cat-transport': '交通費',
-                'cat-utilities': '光熱費',
-                'cat-entertainment': '娯楽',
-                'cat-healthcare': '医療',
-                'cat-other': 'その他',
-                'career-section': 'キャリア＆生産性',
-                'tasks-completed': '完了したタスク',
-                'hours-worked': '作業時間',
-                'meetings-attended': '参加した会議',
-                'learning-time': '学習時間 (分)',
-                'productivity-rating': '生産性評価',
-                'achievements': '今日の成果',
-                'challenges': '直面した課題',
-                'wellbeing-section': 'ウェルビーイング＆マインドフルネス',
-                'mood-today': '今日の気分はいかがですか？',
-                'meditation-time': '瞑想時間 (分)',
-                'stress-level': 'ストレスレベル',
-                'stress-low': '低',
-                'stress-medium': '中',
-                'stress-high': '高',
-                'mindfulness-activities': 'マインドフルネス活動',
-                'act-meditation': '瞑想',
-                'act-gratitude': '感謝日記',
-                'act-walk': 'マインドフル散歩',
-                'act-breathing': '深呼吸',
-                'act-yoga': 'ヨガ',
-                'gratitude': '感謝 - 今日感謝していることは？',
-                'reflection': '今日の振り返り',
-                'btn-clear': 'すべてクリア',
-                'btn-save': '記録を保存'
+            {
+                type: 'number',
+                number: 'Question 2 of 8',
+                question: 'Steps today?',
+                key: 'steps',
+                placeholder: '10000',
+                unit: 'steps'
+            },
+            {
+                type: 'number',
+                number: 'Question 3 of 8',
+                question: 'Hours of sleep?',
+                key: 'sleep',
+                placeholder: '8',
+                unit: 'hours'
+            },
+            {
+                type: 'slider',
+                number: 'Question 4 of 8',
+                question: 'Energy level?',
+                key: 'energy',
+                min: 0,
+                max: 100,
+                default: 50,
+                unit: '%'
+            },
+            {
+                type: 'number',
+                number: 'Question 5 of 8',
+                question: 'Spent today?',
+                key: 'expenses',
+                placeholder: '50',
+                unit: '$'
+            },
+            {
+                type: 'slider',
+                number: 'Question 6 of 8',
+                question: 'Productivity?',
+                key: 'productivity',
+                min: 0,
+                max: 100,
+                default: 50,
+                unit: '%'
+            },
+            {
+                type: 'number',
+                number: 'Question 7 of 8',
+                question: 'Minutes meditated?',
+                key: 'meditation',
+                placeholder: '10',
+                unit: 'min'
+            },
+            {
+                type: 'text',
+                number: 'Question 8 of 8',
+                question: 'One thing you're grateful for?',
+                key: 'gratitude',
+                placeholder: 'Write here...'
             }
-        };
+        ];
 
-        // Get current language
-        let currentLang = localStorage.getItem('lang') || 'en';
+        let currentQuestion = 0;
+        let answers = {};
+        const today = new Date().toISOString().split('T')[0];
 
-        // Update content function
-        function updateContent(lang) {
-            currentLang = lang;
-            localStorage.setItem('lang', lang);
-
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (translations[lang][key]) {
-                    if (element.tagName === 'INPUT' || element.tagName === 'BUTTON') {
-                        if (element.type === 'button' || element.tagName === 'BUTTON') {
-                            element.textContent = translations[lang][key];
-                        }
-                    } else if (element.tagName === 'OPTION') {
-                        element.textContent = translations[lang][key];
-                    } else {
-                        element.textContent = translations[lang][key];
-                    }
+        // Load saved data
+        function loadSavedData() {
+            const saved = localStorage.getItem('dailyLogs');
+            if (saved) {
+                const logs = JSON.parse(saved);
+                if (logs[today]) {
+                    answers = logs[today];
                 }
-            });
-
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.getAttribute('data-lang') === lang) {
-                    btn.classList.add('active');
-                }
-            });
+            }
         }
 
-        // Language toggle
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                updateContent(this.getAttribute('data-lang'));
+        // Save data
+        function saveData() {
+            const saved = localStorage.getItem('dailyLogs') || '{}';
+            const logs = JSON.parse(saved);
+            logs[today] = answers;
+            localStorage.setItem('dailyLogs', JSON.stringify(logs));
+        }
+
+        // Update progress
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        // Render question
+        function renderQuestion() {
+            const container = document.getElementById('container');
+            const question = questions[currentQuestion];
+            const backButton = document.getElementById('backButton');
+            const skipButton = document.getElementById('skipButton');
+
+            // Show/hide buttons
+            backButton.classList.toggle('hidden', currentQuestion === 0);
+            skipButton.classList.toggle('hidden', currentQuestion === questions.length - 1);
+
+            container.style.opacity = '0';
+
+            setTimeout(() => {
+                let html = `
+                    <div class="question-container">
+                        <div class="question-number">${question.number}</div>
+                        <h1 class="question">${question.question}</h1>
+                `;
+
+                if (question.type === 'mood') {
+                    html += '<div class="mood-selector">';
+                    question.options.forEach((emoji, index) => {
+                        const selected = answers[question.key] === emoji ? 'selected' : '';
+                        html += `<button class="mood-button ${selected}" onclick="selectMood('${emoji}')">${emoji}</button>`;
+                    });
+                    html += '</div>';
+                } else if (question.type === 'slider') {
+                    const value = answers[question.key] || question.default;
+                    html += `
+                        <div class="slider-container">
+                            <div class="slider-value" id="sliderValue">${value}${question.unit}</div>
+                            <input type="range" class="slider" min="${question.min}" max="${question.max}"
+                                   value="${value}" id="slider" oninput="updateSlider(this.value, '${question.unit}')">
+                        </div>
+                    `;
+                } else if (question.type === 'text') {
+                    const value = answers[question.key] || '';
+                    html += `
+                        <div class="input-container">
+                            <textarea class="textarea-field" id="input" placeholder="${question.placeholder}"
+                                      oninput="updateAnswer(this.value)">${value}</textarea>
+                        </div>
+                    `;
+                } else {
+                    const value = answers[question.key] || '';
+                    html += `
+                        <div class="input-container">
+                            <input type="number" class="input-field" id="input" placeholder="${question.placeholder}"
+                                   value="${value}" oninput="updateAnswer(this.value)">
+                        </div>
+                    `;
+                }
+
+                html += `
+                        <div class="button-group">
+                            <button class="primary-button" onclick="nextQuestion()">
+                                ${currentQuestion === questions.length - 1 ? 'Finish' : 'Continue'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML = html;
+                container.style.opacity = '1';
+                updateProgress();
+            }, 200);
+        }
+
+        // Select mood
+        function selectMood(emoji) {
+            const question = questions[currentQuestion];
+            answers[question.key] = emoji;
+            saveData();
+
+            document.querySelectorAll('.mood-button').forEach(btn => {
+                btn.classList.remove('selected');
             });
-        });
+            event.target.classList.add('selected');
+
+            setTimeout(() => nextQuestion(), 400);
+        }
+
+        // Update slider
+        function updateSlider(value, unit) {
+            document.getElementById('sliderValue').textContent = value + unit;
+            const question = questions[currentQuestion];
+            answers[question.key] = value;
+            saveData();
+        }
+
+        // Update answer
+        function updateAnswer(value) {
+            const question = questions[currentQuestion];
+            answers[question.key] = value;
+            saveData();
+        }
+
+        // Next question
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                showCompletion();
+            }
+        }
+
+        // Previous question
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        // Skip question
+        function skipQuestion() {
+            nextQuestion();
+        }
+
+        // Show completion
+        function showCompletion() {
+            const container = document.getElementById('container');
+            document.getElementById('backButton').classList.add('hidden');
+            document.getElementById('skipButton').classList.add('hidden');
+            document.getElementById('progress').style.width = '100%';
+
+            container.style.opacity = '0';
+
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div class="completion-screen">
+                        <div class="date-badge">${formatDate(today)}</div>
+                        <div class="completion-icon">
+                            <svg viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <h1 class="completion-title">All done.</h1>
+                        <p class="completion-subtitle">Your day has been logged.</p>
+                        <button class="primary-button" onclick="location.href='dashboard.html'">
+                            View Dashboard
+                        </button>
+                    </div>
+                `;
+                container.style.opacity = '1';
+            }, 200);
+        }
+
+        // Format date
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { month: 'long', day: 'numeric', year: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
 
         // Initialize
-        updateContent(currentLang);
+        loadSavedData();
+        renderQuestion();
 
-        // Set today's date
-        function setToday() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('log-date').value = today;
-        }
-
-        function setYesterday() {
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            document.getElementById('log-date').value = yesterday.toISOString().split('T')[0];
-        }
-
-        // Initialize with today's date
-        setToday();
-
-        // Mood selection
-        function selectMood(btn) {
-            document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-        }
-
-        // Productivity slider
-        const slider = document.getElementById('productivity-slider');
-        const sliderValue = document.getElementById('productivity-value');
-        slider.oninput = function() {
-            sliderValue.textContent = this.value + '%';
-        }
-
-        // Save log
-        function saveLog() {
-            const logData = {
-                date: document.getElementById('log-date').value,
-                health: {
-                    steps: document.getElementById('steps').value,
-                    weight: document.getElementById('weight').value,
-                    water: document.getElementById('water').value,
-                    heartRate: document.getElementById('heart-rate').value,
-                    bedtime: document.getElementById('bedtime').value,
-                    wakeTime: document.getElementById('wake-time').value,
-                    exercise: document.getElementById('exercise').value
-                },
-                finance: {
-                    income: document.getElementById('income').value,
-                    expenses: document.getElementById('expenses').value,
-                    transactions: document.getElementById('transactions').value
-                },
-                career: {
-                    tasks: document.getElementById('tasks').value,
-                    hoursWorked: document.getElementById('hours-worked').value,
-                    meetings: document.getElementById('meetings').value,
-                    learning: document.getElementById('learning').value,
-                    productivity: slider.value,
-                    achievements: document.getElementById('achievements').value,
-                    challenges: document.getElementById('challenges').value
-                },
-                wellbeing: {
-                    mood: document.querySelector('.mood-btn.selected')?.getAttribute('data-mood'),
-                    meditation: document.getElementById('meditation').value,
-                    stressLevel: document.getElementById('stress-level').value,
-                    gratitude: document.getElementById('gratitude').value,
-                    reflection: document.getElementById('reflection').value
-                }
-            };
-
-            // Save to localStorage
-            const savedLogs = JSON.parse(localStorage.getItem('dailyLogs') || '{}');
-            savedLogs[logData.date] = logData;
-            localStorage.setItem('dailyLogs', JSON.stringify(savedLogs));
-
-            // Show success message
-            const successMsg = document.getElementById('success-message');
-            successMsg.classList.add('show');
-            setTimeout(() => {
-                successMsg.classList.remove('show');
-            }, 3000);
-
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Clear form
-        function clearForm() {
-            if (confirm('Are you sure you want to clear all fields?')) {
-                document.querySelectorAll('.form-input, .form-textarea').forEach(input => {
-                    input.value = '';
-                });
-                document.querySelectorAll('.mood-btn').forEach(btn => {
-                    btn.classList.remove('selected');
-                });
-                document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                    cb.checked = false;
-                });
-                slider.value = 50;
-                sliderValue.textContent = '50%';
-                setToday();
-            }
-        }
-
-        // Load existing log when date changes
-        document.getElementById('log-date').addEventListener('change', function() {
-            const savedLogs = JSON.parse(localStorage.getItem('dailyLogs') || '{}');
-            const selectedDate = this.value;
-            const logData = savedLogs[selectedDate];
-
-            if (logData) {
-                // Load saved data
-                if (logData.health) {
-                    document.getElementById('steps').value = logData.health.steps || '';
-                    document.getElementById('weight').value = logData.health.weight || '';
-                    document.getElementById('water').value = logData.health.water || '';
-                    document.getElementById('heart-rate').value = logData.health.heartRate || '';
-                    document.getElementById('bedtime').value = logData.health.bedtime || '';
-                    document.getElementById('wake-time').value = logData.health.wakeTime || '';
-                    document.getElementById('exercise').value = logData.health.exercise || '';
-                }
-                if (logData.finance) {
-                    document.getElementById('income').value = logData.finance.income || '';
-                    document.getElementById('expenses').value = logData.finance.expenses || '';
-                    document.getElementById('transactions').value = logData.finance.transactions || '';
-                }
-                if (logData.career) {
-                    document.getElementById('tasks').value = logData.career.tasks || '';
-                    document.getElementById('hours-worked').value = logData.career.hoursWorked || '';
-                    document.getElementById('meetings').value = logData.career.meetings || '';
-                    document.getElementById('learning').value = logData.career.learning || '';
-                    slider.value = logData.career.productivity || 50;
-                    sliderValue.textContent = (logData.career.productivity || 50) + '%';
-                    document.getElementById('achievements').value = logData.career.achievements || '';
-                    document.getElementById('challenges').value = logData.career.challenges || '';
-                }
-                if (logData.wellbeing) {
-                    if (logData.wellbeing.mood) {
-                        const moodBtn = document.querySelector(`[data-mood="${logData.wellbeing.mood}"]`);
-                        if (moodBtn) selectMood(moodBtn);
-                    }
-                    document.getElementById('meditation').value = logData.wellbeing.meditation || '';
-                    document.getElementById('stress-level').value = logData.wellbeing.stressLevel || 'low';
-                    document.getElementById('gratitude').value = logData.wellbeing.gratitude || '';
-                    document.getElementById('reflection').value = logData.wellbeing.reflection || '';
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                nextQuestion();
+            } else if (e.key === 'Escape') {
+                if (currentQuestion > 0) {
+                    previousQuestion();
                 }
             }
         });
