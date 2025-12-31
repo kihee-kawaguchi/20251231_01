@@ -92,9 +92,6 @@
             max-width: 600px;
             width: 100%;
             text-align: center;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         @keyframes fadeInUp {
@@ -490,14 +487,11 @@
             backButton.classList.toggle('hidden', currentQuestion === 0);
             skipButton.classList.toggle('hidden', currentQuestion === questions.length - 1);
 
-            container.style.opacity = '0';
-
-            setTimeout(() => {
-                let html = `
-                    <div class="question-container">
-                        <div class="question-number">${question.number}</div>
-                        <h1 class="question">${question.question}</h1>
-                `;
+            let html = `
+                <div class="question-container">
+                    <div class="question-number">${question.number}</div>
+                    <h1 class="question">${question.question}</h1>
+            `;
 
                 if (question.type === 'mood') {
                     html += '<div class="mood-selector">';
@@ -542,10 +536,8 @@
                     </div>
                 `;
 
-                container.innerHTML = html;
-                container.style.opacity = '1';
-                updateProgress();
-            }, 200);
+            container.innerHTML = html;
+            updateProgress();
         }
 
         // Select mood
@@ -607,10 +599,7 @@
             document.getElementById('skipButton').classList.add('hidden');
             document.getElementById('progress').style.width = '100%';
 
-            container.style.opacity = '0';
-
-            setTimeout(() => {
-                container.innerHTML = `
+            container.innerHTML = `
                     <div class="completion-screen">
                         <div class="date-badge">${formatDate(today)}</div>
                         <div class="completion-icon">
@@ -625,8 +614,6 @@
                         </button>
                     </div>
                 `;
-                container.style.opacity = '1';
-            }, 200);
         }
 
         // Format date
