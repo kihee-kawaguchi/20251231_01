@@ -15,13 +15,8 @@
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
             background: #FAFAFA;
             color: #1D1D1F;
-            overflow-x: hidden;
-        }
-
-        .container {
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 2rem;
@@ -40,7 +35,8 @@
         .progress-fill {
             height: 100%;
             background: #000000;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 0%;
+            transition: width 0.4s ease;
         }
 
         .back-button {
@@ -52,22 +48,9 @@
             border: none;
             background: transparent;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0.6;
-            transition: opacity 0.3s, transform 0.3s;
+            font-size: 24px;
+            color: #86868B;
             z-index: 100;
-        }
-
-        .back-button:hover {
-            opacity: 1;
-            transform: translateX(-4px);
-        }
-
-        .back-button svg {
-            width: 24px;
-            height: 24px;
         }
 
         .skip-button {
@@ -80,25 +63,13 @@
             font-size: 17px;
             cursor: pointer;
             padding: 0.5rem 1rem;
-            transition: color 0.3s;
             z-index: 100;
         }
 
-        .skip-button:hover {
-            color: #1D1D1F;
-        }
-
-        .question-container {
+        .container {
             max-width: 600px;
             width: 100%;
             text-align: center;
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .question-number {
@@ -116,32 +87,7 @@
             line-height: 1.1;
             margin-bottom: 3rem;
             letter-spacing: -0.5px;
-        }
-
-        .input-container {
-            margin-bottom: 2rem;
-        }
-
-        .input-field {
-            width: 100%;
-            max-width: 400px;
-            padding: 1.5rem;
-            font-size: 32px;
-            font-weight: 500;
-            border: none;
-            border-bottom: 2px solid #D2D2D7;
-            background: transparent;
-            text-align: center;
-            transition: border-color 0.3s;
-            outline: none;
-        }
-
-        .input-field:focus {
-            border-color: #000000;
-        }
-
-        .input-field::placeholder {
-            color: #D2D2D7;
+            color: #1D1D1F;
         }
 
         .mood-selector {
@@ -154,15 +100,12 @@
         .mood-button {
             width: 80px;
             height: 80px;
-            border: 2px solid transparent;
+            border: 2px solid #E8E8ED;
             border-radius: 50%;
             background: #F5F5F7;
             font-size: 40px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: all 0.3s;
         }
 
         .mood-button:hover {
@@ -176,9 +119,35 @@
             transform: scale(1.15);
         }
 
+        .input-field {
+            width: 100%;
+            max-width: 400px;
+            padding: 1.5rem;
+            font-size: 32px;
+            font-weight: 500;
+            border: none;
+            border-bottom: 2px solid #D2D2D7;
+            background: transparent;
+            text-align: center;
+            outline: none;
+            color: #1D1D1F;
+        }
+
+        .input-field:focus {
+            border-color: #000000;
+        }
+
         .slider-container {
             max-width: 400px;
             margin: 0 auto 3rem;
+        }
+
+        .slider-value {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+            color: #1D1D1F;
         }
 
         .slider {
@@ -198,11 +167,6 @@
             border-radius: 50%;
             background: #000000;
             cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
         }
 
         .slider::-moz-range-thumb {
@@ -211,19 +175,6 @@
             border-radius: 50%;
             background: #000000;
             border: none;
-            cursor: pointer;
-        }
-
-        .slider-value {
-            font-size: 56px;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            letter-spacing: -1px;
-        }
-
-        .slider-label {
-            font-size: 17px;
-            color: #86868B;
         }
 
         .textarea-field {
@@ -238,22 +189,11 @@
             background: #FFFFFF;
             resize: vertical;
             outline: none;
-            transition: border-color 0.3s;
+            color: #1D1D1F;
         }
 
         .textarea-field:focus {
             border-color: #000000;
-        }
-
-        .textarea-field::placeholder {
-            color: #D2D2D7;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 3rem;
         }
 
         .primary-button {
@@ -265,22 +205,16 @@
             background: #000000;
             color: #FFFFFF;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 3rem;
+            transition: transform 0.3s;
         }
 
         .primary-button:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .primary-button:active {
-            transform: scale(0.98);
         }
 
         .completion-screen {
-            display: none;
             text-align: center;
-            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         .completion-icon {
@@ -292,24 +226,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: scaleIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        @keyframes scaleIn {
-            from {
-                transform: scale(0);
-            }
-            to {
-                transform: scale(1);
-            }
-        }
-
-        .completion-icon svg {
-            width: 40px;
-            height: 40px;
-            stroke: #FFFFFF;
-            stroke-width: 3;
-            fill: none;
+            font-size: 40px;
+            color: #FFFFFF;
         }
 
         .completion-title {
@@ -317,22 +235,13 @@
             font-weight: 600;
             margin-bottom: 1rem;
             letter-spacing: -0.5px;
+            color: #1D1D1F;
         }
 
         .completion-subtitle {
             font-size: 21px;
             color: #86868B;
             margin-bottom: 3rem;
-        }
-
-        .date-badge {
-            display: inline-block;
-            padding: 0.5rem 1.5rem;
-            background: #F5F5F7;
-            border-radius: 980px;
-            font-size: 15px;
-            color: #86868B;
-            margin-bottom: 2rem;
         }
 
         .hidden {
@@ -343,15 +252,12 @@
             .question {
                 font-size: 36px;
             }
-
             .input-field {
                 font-size: 24px;
             }
-
             .slider-value {
                 font-size: 42px;
             }
-
             .mood-button {
                 width: 60px;
                 height: 60px;
@@ -362,280 +268,156 @@
 </head>
 <body>
     <div class="progress-bar">
-        <div class="progress-fill" id="progress"></div>
+        <div class="progress-fill" id="progressBar"></div>
     </div>
 
-    <button class="back-button hidden" id="backButton" onclick="previousQuestion()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M15 18l-6-6 6-6"/>
-        </svg>
-    </button>
+    <button class="back-button hidden" id="backBtn" onclick="goBack()">←</button>
+    <button class="skip-button" id="skipBtn" onclick="skip()">Skip</button>
 
-    <button class="skip-button" id="skipButton" onclick="skipQuestion()">Skip</button>
-
-    <div class="container" id="container">
-        <!-- Questions will be dynamically rendered here -->
+    <div class="container" id="content">
+        <!-- Content loaded here -->
     </div>
 
     <script>
         const questions = [
-            {
-                type: 'mood',
-                number: 'Question 1 of 8',
-                question: 'How are you feeling?',
-                key: 'mood',
-                options: ['😊', '😌', '😐', '😔', '😫']
-            },
-            {
-                type: 'number',
-                number: 'Question 2 of 8',
-                question: 'Steps today?',
-                key: 'steps',
-                placeholder: '10000',
-                unit: 'steps'
-            },
-            {
-                type: 'number',
-                number: 'Question 3 of 8',
-                question: 'Hours of sleep?',
-                key: 'sleep',
-                placeholder: '8',
-                unit: 'hours'
-            },
-            {
-                type: 'slider',
-                number: 'Question 4 of 8',
-                question: 'Energy level?',
-                key: 'energy',
-                min: 0,
-                max: 100,
-                default: 50,
-                unit: '%'
-            },
-            {
-                type: 'number',
-                number: 'Question 5 of 8',
-                question: 'Spent today?',
-                key: 'expenses',
-                placeholder: '50',
-                unit: '$'
-            },
-            {
-                type: 'slider',
-                number: 'Question 6 of 8',
-                question: 'Productivity?',
-                key: 'productivity',
-                min: 0,
-                max: 100,
-                default: 50,
-                unit: '%'
-            },
-            {
-                type: 'number',
-                number: 'Question 7 of 8',
-                question: 'Minutes meditated?',
-                key: 'meditation',
-                placeholder: '10',
-                unit: 'min'
-            },
-            {
-                type: 'text',
-                number: 'Question 8 of 8',
-                question: 'One thing you're grateful for?',
-                key: 'gratitude',
-                placeholder: 'Write here...'
-            }
+            { type: 'mood', q: 'How are you feeling?', key: 'mood', emojis: ['😊', '😌', '😐', '😔', '😫'] },
+            { type: 'number', q: 'Steps today?', key: 'steps', placeholder: '10000' },
+            { type: 'number', q: 'Hours of sleep?', key: 'sleep', placeholder: '8' },
+            { type: 'slider', q: 'Energy level?', key: 'energy' },
+            { type: 'number', q: 'Spent today?', key: 'expenses', placeholder: '50' },
+            { type: 'slider', q: 'Productivity?', key: 'productivity' },
+            { type: 'number', q: 'Minutes meditated?', key: 'meditation', placeholder: '10' },
+            { type: 'text', q: 'One thing you're grateful for?', key: 'gratitude', placeholder: 'Write here...' }
         ];
 
-        let currentQuestion = 0;
-        let answers = {};
+        let current = 0;
+        let data = {};
         const today = new Date().toISOString().split('T')[0];
 
-        // Load saved data
-        function loadSavedData() {
+        function load() {
             const saved = localStorage.getItem('dailyLogs');
             if (saved) {
                 const logs = JSON.parse(saved);
-                if (logs[today]) {
-                    answers = logs[today];
-                }
+                if (logs[today]) data = logs[today];
             }
         }
 
-        // Save data
-        function saveData() {
+        function save() {
             const saved = localStorage.getItem('dailyLogs') || '{}';
             const logs = JSON.parse(saved);
-            logs[today] = answers;
+            logs[today] = data;
             localStorage.setItem('dailyLogs', JSON.stringify(logs));
         }
 
-        // Update progress
         function updateProgress() {
-            const progress = ((currentQuestion + 1) / questions.length) * 100;
-            document.getElementById('progress').style.width = progress + '%';
+            const pct = ((current + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = pct + '%';
         }
 
-        // Render question
-        function renderQuestion() {
-            const container = document.getElementById('container');
-            const question = questions[currentQuestion];
-            const backButton = document.getElementById('backButton');
-            const skipButton = document.getElementById('skipButton');
+        function render() {
+            const q = questions[current];
+            const num = `Question ${current + 1} of ${questions.length}`;
 
-            // Show/hide buttons
-            backButton.classList.toggle('hidden', currentQuestion === 0);
-            skipButton.classList.toggle('hidden', currentQuestion === questions.length - 1);
+            document.getElementById('backBtn').classList.toggle('hidden', current === 0);
+            document.getElementById('skipBtn').classList.toggle('hidden', current === questions.length - 1);
 
-            let html = `
-                <div class="question-container">
-                    <div class="question-number">${question.number}</div>
-                    <h1 class="question">${question.question}</h1>
-            `;
+            let html = `<div class="question-number">${num}</div><h1 class="question">${q.q}</h1>`;
 
-                if (question.type === 'mood') {
-                    html += '<div class="mood-selector">';
-                    question.options.forEach((emoji, index) => {
-                        const selected = answers[question.key] === emoji ? 'selected' : '';
-                        html += `<button class="mood-button ${selected}" onclick="selectMood('${emoji}')">${emoji}</button>`;
-                    });
-                    html += '</div>';
-                } else if (question.type === 'slider') {
-                    const value = answers[question.key] || question.default;
-                    html += `
-                        <div class="slider-container">
-                            <div class="slider-value" id="sliderValue">${value}${question.unit}</div>
-                            <input type="range" class="slider" min="${question.min}" max="${question.max}"
-                                   value="${value}" id="slider" oninput="updateSlider(this.value, '${question.unit}')">
-                        </div>
-                    `;
-                } else if (question.type === 'text') {
-                    const value = answers[question.key] || '';
-                    html += `
-                        <div class="input-container">
-                            <textarea class="textarea-field" id="input" placeholder="${question.placeholder}"
-                                      oninput="updateAnswer(this.value)">${value}</textarea>
-                        </div>
-                    `;
-                } else {
-                    const value = answers[question.key] || '';
-                    html += `
-                        <div class="input-container">
-                            <input type="number" class="input-field" id="input" placeholder="${question.placeholder}"
-                                   value="${value}" oninput="updateAnswer(this.value)">
-                        </div>
-                    `;
-                }
+            if (q.type === 'mood') {
+                html += '<div class="mood-selector">';
+                q.emojis.forEach(e => {
+                    const sel = data[q.key] === e ? 'selected' : '';
+                    html += `<button class="mood-button ${sel}" onclick="selectMood('${e}')">${e}</button>`;
+                });
+                html += '</div>';
+            } else if (q.type === 'slider') {
+                const val = data[q.key] || 50;
+                html += `<div class="slider-container">
+                    <div class="slider-value" id="sliderVal">${val}%</div>
+                    <input type="range" class="slider" min="0" max="100" value="${val}"
+                           oninput="updateSlider(this.value)">
+                </div>`;
+            } else if (q.type === 'text') {
+                const val = data[q.key] || '';
+                html += `<textarea class="textarea-field" oninput="data['${q.key}'] = this.value; save();"
+                         placeholder="${q.placeholder}">${val}</textarea>`;
+            } else {
+                const val = data[q.key] || '';
+                html += `<input type="number" class="input-field" value="${val}"
+                         placeholder="${q.placeholder}"
+                         oninput="data['${q.key}'] = this.value; save();">`;
+            }
 
-                html += `
-                        <div class="button-group">
-                            <button class="primary-button" onclick="nextQuestion()">
-                                ${currentQuestion === questions.length - 1 ? 'Finish' : 'Continue'}
-                            </button>
-                        </div>
-                    </div>
-                `;
+            html += `<button class="primary-button" onclick="next()">
+                ${current === questions.length - 1 ? 'Finish' : 'Continue'}
+            </button>`;
 
-            container.innerHTML = html;
+            document.getElementById('content').innerHTML = html;
             updateProgress();
         }
 
-        // Select mood
         function selectMood(emoji) {
-            const question = questions[currentQuestion];
-            answers[question.key] = emoji;
-            saveData();
-
-            document.querySelectorAll('.mood-button').forEach(btn => {
-                btn.classList.remove('selected');
-            });
+            data[questions[current].key] = emoji;
+            save();
+            document.querySelectorAll('.mood-button').forEach(b => b.classList.remove('selected'));
             event.target.classList.add('selected');
-
-            setTimeout(() => nextQuestion(), 400);
+            setTimeout(next, 400);
         }
 
-        // Update slider
-        function updateSlider(value, unit) {
-            document.getElementById('sliderValue').textContent = value + unit;
-            const question = questions[currentQuestion];
-            answers[question.key] = value;
-            saveData();
+        function updateSlider(val) {
+            document.getElementById('sliderVal').textContent = val + '%';
+            data[questions[current].key] = val;
+            save();
         }
 
-        // Update answer
-        function updateAnswer(value) {
-            const question = questions[currentQuestion];
-            answers[question.key] = value;
-            saveData();
-        }
-
-        // Next question
-        function nextQuestion() {
-            if (currentQuestion < questions.length - 1) {
-                currentQuestion++;
-                renderQuestion();
+        function next() {
+            if (current < questions.length - 1) {
+                current++;
+                render();
             } else {
-                showCompletion();
+                finish();
             }
         }
 
-        // Previous question
-        function previousQuestion() {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                renderQuestion();
+        function goBack() {
+            if (current > 0) {
+                current--;
+                render();
             }
         }
 
-        // Skip question
-        function skipQuestion() {
-            nextQuestion();
+        function skip() {
+            next();
         }
 
-        // Show completion
-        function showCompletion() {
-            const container = document.getElementById('container');
-            document.getElementById('backButton').classList.add('hidden');
-            document.getElementById('skipButton').classList.add('hidden');
-            document.getElementById('progress').style.width = '100%';
+        function finish() {
+            document.getElementById('backBtn').classList.add('hidden');
+            document.getElementById('skipBtn').classList.add('hidden');
+            document.getElementById('progressBar').style.width = '100%';
 
-            container.innerHTML = `
-                    <div class="completion-screen">
-                        <div class="date-badge">${formatDate(today)}</div>
-                        <div class="completion-icon">
-                            <svg viewBox="0 0 24 24">
-                                <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                        </div>
-                        <h1 class="completion-title">All done.</h1>
-                        <p class="completion-subtitle">Your day has been logged.</p>
-                        <button class="primary-button" onclick="location.href='dashboard.html'">
-                            View Dashboard
-                        </button>
-                    </div>
-                `;
+            document.getElementById('content').innerHTML = `
+                <div class="completion-screen">
+                    <div class="completion-icon">✓</div>
+                    <h1 class="completion-title">All done.</h1>
+                    <p class="completion-subtitle">Your day has been logged.</p>
+                    <button class="primary-button" onclick="location.href='dashboard.html'">
+                        View Dashboard
+                    </button>
+                </div>
+            `;
         }
 
-        // Format date
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            const options = { month: 'long', day: 'numeric', year: 'numeric' };
-            return date.toLocaleDateString('en-US', options);
-        }
+        // Init
+        load();
+        render();
 
-        // Initialize
-        loadSavedData();
-        renderQuestion();
-
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
+        // Keyboard
+        document.addEventListener('keydown', e => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                nextQuestion();
-            } else if (e.key === 'Escape') {
-                if (currentQuestion > 0) {
-                    previousQuestion();
-                }
+                next();
+            } else if (e.key === 'Escape' && current > 0) {
+                goBack();
             }
         });
     </script>
