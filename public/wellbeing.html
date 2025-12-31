@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page-title">Well-being Overview - LifeOS AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2C5F7F;
+            --secondary-color: #5A9BC6;
+            --text-dark: #2C3E50;
+            --text-light: #6C7A89;
+            --bg-light: #F8F9FA;
+            --white: #FFFFFF;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --calm: #81C784;
+            --peaceful: #64B5F6;
+            --energized: #FFB74D;
+            --border: #E0E0E0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .lang-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 2px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .back-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Mood Tracker */
+        .mood-tracker {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .mood-selector {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .mood-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 1rem;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mood-btn:hover, .mood-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: var(--white);
+            transform: scale(1.1);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .metric-icon {
+            font-size: 2.5rem;
+        }
+
+        .metric-title {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-calm {
+            background: #E8F5E9;
+            color: var(--calm);
+        }
+
+        .status-balanced {
+            background: #E3F2FD;
+            color: var(--peaceful);
+        }
+
+        .widget {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .widget-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .week-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 200px;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .day-emoji {
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .day-emoji:hover {
+            transform: scale(1.1);
+        }
+
+        .emoji {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .day-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .activity-icon {
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activity-icon.meditation {
+            background: #E1BEE7;
+        }
+
+        .activity-icon.gratitude {
+            background: #FFCCBC;
+        }
+
+        .activity-icon.exercise {
+            background: #C5E1A5;
+        }
+
+        .activity-icon.social {
+            background: #BBDEFB;
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-details h4 {
+            margin-bottom: 0.3rem;
+        }
+
+        .activity-details p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .streak-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .balance-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .balance-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+        }
+
+        .balance-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+        }
+
+        .balance-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #E0E0E0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s;
+        }
+
+        .affirmation-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .affirmation-text {
+            font-size: 1.5rem;
+            font-weight: 300;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .balance-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mood-selector {
+                gap: 1rem;
+            }
+
+            .mood-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="dashboard.html" class="back-link">← <span data-i18n="back-to-dashboard">Back to Dashboard</span></a>
+
+        <div class="header">
+            <div>
+                <h1 data-i18n="header-title">🧘 Well-being Overview</h1>
+                <p data-i18n="header-subtitle">Nurture your mind and soul</p>
+            </div>
+            <div class="lang-toggle">
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="ja">日本語</button>
+            </div>
+        </div>
+
+        <!-- Daily Affirmation -->
+        <div class="affirmation-card">
+            <p class="affirmation-text" data-i18n="affirmation">
+                "I am calm, focused, and at peace with myself."
+            </p>
+        </div>
+
+        <!-- Mood Tracker -->
+        <div class="mood-tracker">
+            <h2 style="margin-bottom: 0.5rem;" data-i18n="how-feeling">How are you feeling today?</h2>
+            <p style="opacity: 0.9;" data-i18n="tap-mood">Tap an emoji to log your mood</p>
+            <div class="mood-selector">
+                <button class="mood-btn">😊</button>
+                <button class="mood-btn active">😌</button>
+                <button class="mood-btn">😐</button>
+                <button class="mood-btn">😔</button>
+                <button class="mood-btn">😫</button>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">🧘</div>
+                </div>
+                <div class="metric-title" data-i18n="meditation-streak">Meditation Streak</div>
+                <div class="metric-value" style="color: var(--calm);">12 <span style="font-size: 1rem;">days</span></div>
+                <div class="status-badge status-calm" data-i18n="going-strong">Going Strong!</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">😌</div>
+                </div>
+                <div class="metric-title" data-i18n="stress-level">Stress Level</div>
+                <div class="metric-value" style="color: var(--success);" data-i18n="stress-low">Low</div>
+                <div class="status-badge status-calm" data-i18n="status-calm-badge">Calm</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">⚖️</div>
+                </div>
+                <div class="metric-title" data-i18n="work-life-balance">Work-Life Balance</div>
+                <div class="metric-value" style="color: var(--peaceful);">78%</div>
+                <div class="status-badge status-balanced" data-i18n="status-balanced">Balanced</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-header">
+                    <div class="metric-icon">🌟</div>
+                </div>
+                <div class="metric-title" data-i18n="happiness-score">Happiness Score</div>
+                <div class="metric-value" style="color: var(--energized);">8.2 <span style="font-size: 1rem;">/10</span></div>
+                <div class="status-badge" style="background: #FFF3E0; color: var(--energized);" data-i18n="status-happy">Happy</div>
+            </div>
+        </div>
+
+        <!-- Weekly Mood -->
+        <div class="widget">
+            <div class="widget-title" data-i18n="weekly-mood">Weekly Mood Tracker</div>
+            <div class="week-chart">
+                <div class="day-emoji">
+                    <span class="emoji">😊</span>
+                    <span class="day-label" data-i18n="day-mon">Mon</span>
+                </div>
+                <div class="day-emoji">
+                    <span class="emoji">😌</span>
+                    <span class="day-label" data-i18n="day-tue">Tue</span>
+                </div>
+                <div class="day-emoji">
+                    <span class="emoji">😊</span>
+                    <span class="day-label" data-i18n="day-wed">Wed</span>
+                </div>
+                <div class="day-emoji">
+                    <span class="emoji">😐</span>
+                    <span class="day-label" data-i18n="day-thu">Thu</span>
+                </div>
+                <div class="day-emoji">
+                    <span class="emoji">😌</span>
+                    <span class="day-label" data-i18n="day-fri">Fri</span>
+                </div>
+                <div class="day-emoji">
+                    <span class="emoji">😊</span>
+                    <span class="day-label" data-i18n="day-sat">Sat</span>
+                </div>
+                <div class="day-emoji">
+                    <span class="emoji">😌</span>
+                    <span class="day-label" data-i18n="day-sun">Sun</span>
+                </div>
+            </div>
+            <p style="text-align: center; color: var(--text-light); margin-top: 2rem;" data-i18n="mood-summary">
+                Mostly positive week - Great job maintaining your emotional balance!
+            </p>
+        </div>
+
+        <!-- Today's Mindfulness Activities -->
+        <div class="widget">
+            <div class="widget-title" data-i18n="mindfulness-activities">Today's Mindfulness Activities</div>
+            <ul class="activity-list">
+                <li class="activity-item">
+                    <div class="activity-icon meditation">🧘</div>
+                    <div class="activity-details">
+                        <h4 data-i18n="activity-meditation">Morning Meditation</h4>
+                        <p data-i18n="activity-meditation-desc">15 minutes guided meditation</p>
+                    </div>
+                    <span class="streak-badge">12 <span data-i18n="days">days</span></span>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon gratitude">📝</div>
+                    <div class="activity-details">
+                        <h4 data-i18n="activity-gratitude">Gratitude Journal</h4>
+                        <p data-i18n="activity-gratitude-desc">Listed 3 things I'm grateful for</p>
+                    </div>
+                    <span class="streak-badge">8 <span data-i18n="days">days</span></span>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon exercise">🚶</div>
+                    <div class="activity-details">
+                        <h4 data-i18n="activity-walk">Mindful Walk</h4>
+                        <p data-i18n="activity-walk-desc">20 minutes in nature</p>
+                    </div>
+                    <span class="streak-badge">5 <span data-i18n="days">days</span></span>
+                </li>
+                <li class="activity-item">
+                    <div class="activity-icon social">💬</div>
+                    <div class="activity-details">
+                        <h4 data-i18n="activity-social">Quality Time</h4>
+                        <p data-i18n="activity-social-desc">30 min call with friend</p>
+                    </div>
+                    <span class="streak-badge" data-i18n="today-badge">Today</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Work-Life Balance -->
+        <div class="widget">
+            <div class="widget-title" data-i18n="balance-breakdown">Work-Life Balance Breakdown</div>
+            <div class="balance-grid">
+                <div class="balance-card">
+                    <div style="font-size: 3rem;">💼</div>
+                    <div class="balance-value">45h</div>
+                    <div class="balance-label" data-i18n="work-hours">Work Hours This Week</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 90%; background: var(--secondary-color);"></div>
+                    </div>
+                </div>
+
+                <div class="balance-card">
+                    <div style="font-size: 3rem;">🏠</div>
+                    <div class="balance-value">58h</div>
+                    <div class="balance-label" data-i18n="personal-time">Personal Time This Week</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%; background: var(--success);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1.5rem; background: var(--bg-light); border-radius: 8px;">
+                <h4 style="margin-bottom: 1rem;" data-i18n="balance-insights">Balance Insights</h4>
+                <ul style="list-style: none; color: var(--text-light);">
+                    <li style="margin-bottom: 0.5rem;">✓ <span data-i18n="insight-1">Taking regular breaks during work</span></li>
+                    <li style="margin-bottom: 0.5rem;">✓ <span data-i18n="insight-2">Spending quality time with loved ones</span></li>
+                    <li style="margin-bottom: 0.5rem;">✓ <span data-i18n="insight-3">Maintaining healthy boundaries</span></li>
+                    <li>💡 <span data-i18n="insight-4">Consider more outdoor activities this weekend</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Stress Management -->
+        <div class="widget">
+            <div class="widget-title" data-i18n="stress-management">Stress Management Techniques</div>
+            <div class="metrics-grid">
+                <div class="metric-card" style="border-left: 4px solid var(--calm);">
+                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">🌬️ <span data-i18n="technique-breathing">Deep Breathing</span></h4>
+                    <p style="color: var(--text-light);" data-i18n="technique-breathing-desc">Used 3 times today</p>
+                    <div class="progress-bar" style="margin-top: 1rem;">
+                        <div class="progress-fill" style="width: 100%; background: var(--calm);"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card" style="border-left: 4px solid var(--peaceful);">
+                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">🎵 <span data-i18n="technique-music">Calming Music</span></h4>
+                    <p style="color: var(--text-light);" data-i18n="technique-music-desc">45 minutes listened</p>
+                    <div class="progress-bar" style="margin-top: 1rem;">
+                        <div class="progress-fill" style="width: 75%; background: var(--peaceful);"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card" style="border-left: 4px solid var(--success);">
+                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">📚 <span data-i18n="technique-reading">Reading Time</span></h4>
+                    <p style="color: var(--text-light);" data-i18n="technique-reading-desc">30 minutes today</p>
+                    <div class="progress-bar" style="margin-top: 1rem;">
+                        <div class="progress-fill" style="width: 60%; background: var(--success);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                'page-title': 'Well-being Overview - LifeOS AI',
+                'back-to-dashboard': 'Back to Dashboard',
+                'header-title': '🧘 Well-being Overview',
+                'header-subtitle': 'Nurture your mind and soul',
+                'affirmation': '"I am calm, focused, and at peace with myself."',
+                'how-feeling': 'How are you feeling today?',
+                'tap-mood': 'Tap an emoji to log your mood',
+                'meditation-streak': 'Meditation Streak',
+                'going-strong': 'Going Strong!',
+                'stress-level': 'Stress Level',
+                'stress-low': 'Low',
+                'status-calm-badge': 'Calm',
+                'work-life-balance': 'Work-Life Balance',
+                'status-balanced': 'Balanced',
+                'happiness-score': 'Happiness Score',
+                'status-happy': 'Happy',
+                'weekly-mood': 'Weekly Mood Tracker',
+                'day-mon': 'Mon',
+                'day-tue': 'Tue',
+                'day-wed': 'Wed',
+                'day-thu': 'Thu',
+                'day-fri': 'Fri',
+                'day-sat': 'Sat',
+                'day-sun': 'Sun',
+                'mood-summary': 'Mostly positive week - Great job maintaining your emotional balance!',
+                'mindfulness-activities': "Today's Mindfulness Activities",
+                'activity-meditation': 'Morning Meditation',
+                'activity-meditation-desc': '15 minutes guided meditation',
+                'activity-gratitude': 'Gratitude Journal',
+                'activity-gratitude-desc': "Listed 3 things I'm grateful for",
+                'activity-walk': 'Mindful Walk',
+                'activity-walk-desc': '20 minutes in nature',
+                'activity-social': 'Quality Time',
+                'activity-social-desc': '30 min call with friend',
+                'days': 'days',
+                'today-badge': 'Today',
+                'balance-breakdown': 'Work-Life Balance Breakdown',
+                'work-hours': 'Work Hours This Week',
+                'personal-time': 'Personal Time This Week',
+                'balance-insights': 'Balance Insights',
+                'insight-1': 'Taking regular breaks during work',
+                'insight-2': 'Spending quality time with loved ones',
+                'insight-3': 'Maintaining healthy boundaries',
+                'insight-4': 'Consider more outdoor activities this weekend',
+                'stress-management': 'Stress Management Techniques',
+                'technique-breathing': 'Deep Breathing',
+                'technique-breathing-desc': 'Used 3 times today',
+                'technique-music': 'Calming Music',
+                'technique-music-desc': '45 minutes listened',
+                'technique-reading': 'Reading Time',
+                'technique-reading-desc': '30 minutes today'
+            },
+            ja: {
+                'page-title': 'ウェルビーイング概要 - LifeOS AI',
+                'back-to-dashboard': 'ダッシュボードに戻る',
+                'header-title': '🧘 ウェルビーイング概要',
+                'header-subtitle': '心と魂を育む',
+                'affirmation': '「私は穏やかで、集中しており、自分自身と平和です。」',
+                'how-feeling': '今日の気分はいかがですか？',
+                'tap-mood': '絵文字をタップして気分を記録',
+                'meditation-streak': '瞑想ストリーク',
+                'going-strong': '継続中！',
+                'stress-level': 'ストレスレベル',
+                'stress-low': '低',
+                'status-calm-badge': '穏やか',
+                'work-life-balance': 'ワークライフバランス',
+                'status-balanced': 'バランス良好',
+                'happiness-score': '幸福度スコア',
+                'status-happy': '幸せ',
+                'weekly-mood': '週間気分トラッカー',
+                'day-mon': '月',
+                'day-tue': '火',
+                'day-wed': '水',
+                'day-thu': '木',
+                'day-fri': '金',
+                'day-sat': '土',
+                'day-sun': '日',
+                'mood-summary': '概してポジティブな週 - 感情のバランスを維持できています！',
+                'mindfulness-activities': '本日のマインドフルネス活動',
+                'activity-meditation': '朝の瞑想',
+                'activity-meditation-desc': '15分間のガイド瞑想',
+                'activity-gratitude': '感謝日記',
+                'activity-gratitude-desc': '感謝していること3つを記録',
+                'activity-walk': 'マインドフル散歩',
+                'activity-walk-desc': '自然の中で20分',
+                'activity-social': '質の高い時間',
+                'activity-social-desc': '友人と30分通話',
+                'days': '日間',
+                'today-badge': '今日',
+                'balance-breakdown': 'ワークライフバランス内訳',
+                'work-hours': '今週の労働時間',
+                'personal-time': '今週の個人時間',
+                'balance-insights': 'バランスの洞察',
+                'insight-1': '仕事中に定期的に休憩を取っている',
+                'insight-2': '大切な人と質の高い時間を過ごしている',
+                'insight-3': '健全な境界線を維持している',
+                'insight-4': '今週末はもっと屋外活動を検討してください',
+                'stress-management': 'ストレス管理テクニック',
+                'technique-breathing': '深呼吸',
+                'technique-breathing-desc': '今日3回使用',
+                'technique-music': '癒しの音楽',
+                'technique-music-desc': '45分間聴いた',
+                'technique-reading': '読書時間',
+                'technique-reading-desc': '今日30分'
+            }
+        };
+
+        // Get current language
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        // Update content
+        function updateContent(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    if (element.tagName === 'TITLE') {
+                        document.title = translations[lang][key];
+                    } else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Language toggle
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                updateContent(this.getAttribute('data-lang'));
+            });
+        });
+
+        // Mood selector
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Initialize
+        updateContent(currentLang);
+    </script>
+</body>
+</html>
