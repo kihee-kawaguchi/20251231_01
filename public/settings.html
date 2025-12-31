@@ -396,7 +396,15 @@
                         <option selected>UTC+9 (Tokyo)</option>
                     </select>
                 </div>
-                <button class="button button-primary" data-i18n="save-changes">Save Changes</button>
+                <div class="input-group">
+                    <label class="input-label" data-i18n="birthdate-label">Birth Date</label>
+                    <input type="date" class="input-field" id="birthdate" placeholder="YYYY-MM-DD">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" data-i18n="birthtime-label">Birth Time</label>
+                    <input type="time" class="input-field" id="birthtime" placeholder="HH:MM">
+                </div>
+                <button class="button button-primary" data-i18n="save-changes" onclick="saveAccountSettings()">Save Changes</button>
             </div>
 
             <!-- Notification Settings -->
@@ -566,6 +574,8 @@
                 'name-label': 'Full Name',
                 'email-label': 'Email Address',
                 'timezone-label': 'Timezone',
+                'birthdate-label': 'Birth Date',
+                'birthtime-label': 'Birth Time',
                 'save-changes': 'Save Changes',
                 'notifications-title': 'Notifications',
                 'email-notifications': 'Email Notifications',
@@ -617,6 +627,8 @@
                 'name-label': '氏名',
                 'email-label': 'メールアドレス',
                 'timezone-label': 'タイムゾーン',
+                'birthdate-label': '生年月日',
+                'birthtime-label': '生まれた時間',
                 'save-changes': '変更を保存',
                 'notifications-title': '通知',
                 'email-notifications': 'メール通知',
@@ -689,6 +701,41 @@
 
         // Initialize language
         updateContent(currentLang);
+
+        // Save account settings
+        function saveAccountSettings() {
+            const birthdate = document.getElementById('birthdate').value;
+            const birthtime = document.getElementById('birthtime').value;
+
+            const settings = {
+                birthdate: birthdate,
+                birthtime: birthtime
+            };
+
+            localStorage.setItem('accountSettings', JSON.stringify(settings));
+
+            const message = currentLang === 'ja'
+                ? '設定を保存しました'
+                : 'Settings saved successfully';
+            alert(message);
+        }
+
+        // Load account settings
+        function loadAccountSettings() {
+            const saved = localStorage.getItem('accountSettings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                if (settings.birthdate) {
+                    document.getElementById('birthdate').value = settings.birthdate;
+                }
+                if (settings.birthtime) {
+                    document.getElementById('birthtime').value = settings.birthtime;
+                }
+            }
+        }
+
+        // Load settings on page load
+        window.addEventListener('DOMContentLoaded', loadAccountSettings);
     </script>
 </body>
 </html>
