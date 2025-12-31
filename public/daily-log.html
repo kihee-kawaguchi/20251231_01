@@ -315,8 +315,12 @@
         }
 
         function render() {
+            console.log('Rendering question', current);
             const q = questions[current];
             const num = `Question ${current + 1} of ${questions.length}`;
+
+            const content = document.getElementById('content');
+            console.log('Content element:', content);
 
             document.getElementById('backBtn').classList.toggle('hidden', current === 0);
             document.getElementById('skipBtn').classList.toggle('hidden', current === questions.length - 1);
@@ -352,7 +356,13 @@
                 ${current === questions.length - 1 ? 'Finish' : 'Continue'}
             </button>`;
 
-            document.getElementById('content').innerHTML = html;
+            const contentEl = document.getElementById('content');
+            if (contentEl) {
+                contentEl.innerHTML = html;
+                console.log('Content set:', html.substring(0, 100));
+            } else {
+                console.error('Content element not found!');
+            }
             updateProgress();
         }
 
@@ -408,8 +418,10 @@
         }
 
         // Init
-        load();
-        render();
+        window.onload = function() {
+            load();
+            render();
+        };
 
         // Keyboard
         document.addEventListener('keydown', e => {
@@ -420,6 +432,9 @@
                 goBack();
             }
         });
+
+        // Emergency debug
+        console.log('Script loaded');
     </script>
 </body>
 </html>
