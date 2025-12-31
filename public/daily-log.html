@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Log - LifeOS AI</title>
+    <title>Daily Log</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             background: #FAFAFA;
             color: #1D1D1F;
             min-height: 100vh;
@@ -34,9 +30,9 @@
 
         .progress-fill {
             height: 100%;
-            background: #000000;
+            background: #000;
             width: 0%;
-            transition: width 0.4s ease;
+            transition: width 0.4s;
         }
 
         .back-button {
@@ -114,8 +110,8 @@
         }
 
         .mood-button.selected {
-            border-color: #000000;
-            background: #FFFFFF;
+            border-color: #000;
+            background: #FFF;
             transform: scale(1.15);
         }
 
@@ -133,9 +129,7 @@
             color: #1D1D1F;
         }
 
-        .input-field:focus {
-            border-color: #000000;
-        }
+        .input-field:focus { border-color: #000; }
 
         .slider-container {
             max-width: 400px;
@@ -165,7 +159,7 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: #000000;
+            background: #000;
             cursor: pointer;
         }
 
@@ -173,7 +167,7 @@
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: #000000;
+            background: #000;
             border: none;
         }
 
@@ -186,15 +180,13 @@
             font-family: inherit;
             border: 2px solid #E8E8ED;
             border-radius: 12px;
-            background: #FFFFFF;
+            background: #FFF;
             resize: vertical;
             outline: none;
             color: #1D1D1F;
         }
 
-        .textarea-field:focus {
-            border-color: #000000;
-        }
+        .textarea-field:focus { border-color: #000; }
 
         .primary-button {
             padding: 1rem 3rem;
@@ -202,32 +194,28 @@
             font-weight: 500;
             border: none;
             border-radius: 980px;
-            background: #000000;
-            color: #FFFFFF;
+            background: #000;
+            color: #FFF;
             cursor: pointer;
             margin-top: 3rem;
             transition: transform 0.3s;
         }
 
-        .primary-button:hover {
-            transform: scale(1.05);
-        }
+        .primary-button:hover { transform: scale(1.05); }
 
-        .completion-screen {
-            text-align: center;
-        }
+        .completion-screen { text-align: center; }
 
         .completion-icon {
             width: 80px;
             height: 80px;
             margin: 0 auto 2rem;
             border-radius: 50%;
-            background: #000000;
+            background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 40px;
-            color: #FFFFFF;
+            color: #FFF;
         }
 
         .completion-title {
@@ -244,25 +232,13 @@
             margin-bottom: 3rem;
         }
 
-        .hidden {
-            display: none;
-        }
+        .hidden { display: none; }
 
         @media (max-width: 768px) {
-            .question {
-                font-size: 36px;
-            }
-            .input-field {
-                font-size: 24px;
-            }
-            .slider-value {
-                font-size: 42px;
-            }
-            .mood-button {
-                width: 60px;
-                height: 60px;
-                font-size: 30px;
-            }
+            .question { font-size: 36px; }
+            .input-field { font-size: 24px; }
+            .slider-value { font-size: 42px; }
+            .mood-button { width: 60px; height: 60px; font-size: 30px; }
         }
     </style>
 </head>
@@ -274,102 +250,91 @@
     <button class="back-button hidden" id="backBtn" onclick="goBack()">←</button>
     <button class="skip-button" id="skipBtn" onclick="skip()">Skip</button>
 
-    <div class="container" id="content">
-        <!-- Content loaded here -->
-    </div>
+    <div class="container" id="content"></div>
 
     <script>
-        const questions = [
+        var questions = [
             { type: 'mood', q: 'How are you feeling?', key: 'mood', emojis: ['😊', '😌', '😐', '😔', '😫'] },
-            { type: 'number', q: 'Steps today?', key: 'steps', placeholder: '10000' },
-            { type: 'number', q: 'Hours of sleep?', key: 'sleep', placeholder: '8' },
+            { type: 'number', q: 'Steps today?', key: 'steps', ph: '10000' },
+            { type: 'number', q: 'Hours of sleep?', key: 'sleep', ph: '8' },
             { type: 'slider', q: 'Energy level?', key: 'energy' },
-            { type: 'number', q: 'Spent today?', key: 'expenses', placeholder: '50' },
+            { type: 'number', q: 'Spent today?', key: 'expenses', ph: '50' },
             { type: 'slider', q: 'Productivity?', key: 'productivity' },
-            { type: 'number', q: 'Minutes meditated?', key: 'meditation', placeholder: '10' },
-            { type: 'text', q: 'One thing you're grateful for?', key: 'gratitude', placeholder: 'Write here...' }
+            { type: 'number', q: 'Minutes meditated?', key: 'meditation', ph: '10' },
+            { type: 'text', q: 'One thing you\'re grateful for?', key: 'gratitude', ph: 'Write here...' }
         ];
 
-        let current = 0;
-        let data = {};
-        const today = new Date().toISOString().split('T')[0];
+        var current = 0;
+        var data = {};
+        var today = new Date().toISOString().split('T')[0];
 
         function load() {
-            const saved = localStorage.getItem('dailyLogs');
+            var saved = localStorage.getItem('dailyLogs');
             if (saved) {
-                const logs = JSON.parse(saved);
+                var logs = JSON.parse(saved);
                 if (logs[today]) data = logs[today];
             }
         }
 
         function save() {
-            const saved = localStorage.getItem('dailyLogs') || '{}';
-            const logs = JSON.parse(saved);
+            var saved = localStorage.getItem('dailyLogs') || '{}';
+            var logs = JSON.parse(saved);
             logs[today] = data;
             localStorage.setItem('dailyLogs', JSON.stringify(logs));
         }
 
         function updateProgress() {
-            const pct = ((current + 1) / questions.length) * 100;
+            var pct = ((current + 1) / questions.length) * 100;
             document.getElementById('progressBar').style.width = pct + '%';
         }
 
         function render() {
-            console.log('Rendering question', current);
-            const q = questions[current];
-            const num = `Question ${current + 1} of ${questions.length}`;
-
-            const content = document.getElementById('content');
-            console.log('Content element:', content);
+            var q = questions[current];
+            var num = 'Question ' + (current + 1) + ' of ' + questions.length;
 
             document.getElementById('backBtn').classList.toggle('hidden', current === 0);
             document.getElementById('skipBtn').classList.toggle('hidden', current === questions.length - 1);
 
-            let html = `<div class="question-number">${num}</div><h1 class="question">${q.q}</h1>`;
+            var html = '<div class="question-number">' + num + '</div><h1 class="question">' + q.q + '</h1>';
 
             if (q.type === 'mood') {
                 html += '<div class="mood-selector">';
-                q.emojis.forEach(e => {
-                    const sel = data[q.key] === e ? 'selected' : '';
-                    html += `<button class="mood-button ${sel}" onclick="selectMood('${e}')">${e}</button>`;
-                });
+                for (var i = 0; i < q.emojis.length; i++) {
+                    var e = q.emojis[i];
+                    var sel = data[q.key] === e ? 'selected' : '';
+                    html += '<button class="mood-button ' + sel + '" onclick="selectMood(\'' + e + '\')">' + e + '</button>';
+                }
                 html += '</div>';
             } else if (q.type === 'slider') {
-                const val = data[q.key] || 50;
-                html += `<div class="slider-container">
-                    <div class="slider-value" id="sliderVal">${val}%</div>
-                    <input type="range" class="slider" min="0" max="100" value="${val}"
-                           oninput="updateSlider(this.value)">
-                </div>`;
+                var val = data[q.key] || 50;
+                html += '<div class="slider-container"><div class="slider-value" id="sliderVal">' + val + '%</div>';
+                html += '<input type="range" class="slider" min="0" max="100" value="' + val + '" oninput="updateSlider(this.value)"></div>';
             } else if (q.type === 'text') {
-                const val = data[q.key] || '';
-                html += `<textarea class="textarea-field" oninput="data['${q.key}'] = this.value; save();"
-                         placeholder="${q.placeholder}">${val}</textarea>`;
+                var val = data[q.key] || '';
+                html += '<textarea class="textarea-field" oninput="saveInput(this.value, \'' + q.key + '\')" placeholder="' + q.ph + '">' + val + '</textarea>';
             } else {
-                const val = data[q.key] || '';
-                html += `<input type="number" class="input-field" value="${val}"
-                         placeholder="${q.placeholder}"
-                         oninput="data['${q.key}'] = this.value; save();">`;
+                var val = data[q.key] || '';
+                html += '<input type="number" class="input-field" value="' + val + '" placeholder="' + q.ph + '" oninput="saveInput(this.value, \'' + q.key + '\')">';
             }
 
-            html += `<button class="primary-button" onclick="next()">
-                ${current === questions.length - 1 ? 'Finish' : 'Continue'}
-            </button>`;
+            html += '<button class="primary-button" onclick="next()">' + (current === questions.length - 1 ? 'Finish' : 'Continue') + '</button>';
 
-            const contentEl = document.getElementById('content');
-            if (contentEl) {
-                contentEl.innerHTML = html;
-                console.log('Content set:', html.substring(0, 100));
-            } else {
-                console.error('Content element not found!');
-            }
+            document.getElementById('content').innerHTML = html;
             updateProgress();
+        }
+
+        function saveInput(val, key) {
+            data[key] = val;
+            save();
         }
 
         function selectMood(emoji) {
             data[questions[current].key] = emoji;
             save();
-            document.querySelectorAll('.mood-button').forEach(b => b.classList.remove('selected'));
+            var btns = document.querySelectorAll('.mood-button');
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].classList.remove('selected');
+            }
             event.target.classList.add('selected');
             setTimeout(next, 400);
         }
@@ -405,26 +370,22 @@
             document.getElementById('skipBtn').classList.add('hidden');
             document.getElementById('progressBar').style.width = '100%';
 
-            document.getElementById('content').innerHTML = `
-                <div class="completion-screen">
-                    <div class="completion-icon">✓</div>
-                    <h1 class="completion-title">All done.</h1>
-                    <p class="completion-subtitle">Your day has been logged.</p>
-                    <button class="primary-button" onclick="location.href='dashboard.html'">
-                        View Dashboard
-                    </button>
-                </div>
-            `;
+            var html = '<div class="completion-screen">';
+            html += '<div class="completion-icon">✓</div>';
+            html += '<h1 class="completion-title">All done.</h1>';
+            html += '<p class="completion-subtitle">Your day has been logged.</p>';
+            html += '<button class="primary-button" onclick="location.href=\'dashboard.html\'">View Dashboard</button>';
+            html += '</div>';
+
+            document.getElementById('content').innerHTML = html;
         }
 
-        // Init
         window.onload = function() {
             load();
             render();
         };
 
-        // Keyboard
-        document.addEventListener('keydown', e => {
+        document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 next();
@@ -432,9 +393,6 @@
                 goBack();
             }
         });
-
-        // Emergency debug
-        console.log('Script loaded');
     </script>
 </body>
 </html>
