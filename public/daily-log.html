@@ -35,10 +35,29 @@
             transition: width 0.4s;
         }
 
-        .back-button {
+        .home-button {
             position: fixed;
             top: 2rem;
             left: 2rem;
+            background: transparent;
+            border: none;
+            color: #86868B;
+            font-size: 17px;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            z-index: 100;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .home-button:hover {
+            color: #000;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 8rem;
             width: 44px;
             height: 44px;
             border: none;
@@ -247,6 +266,7 @@
         <div class="progress-fill" id="progressBar"></div>
     </div>
 
+    <a href="dashboard.html" class="home-button">← Dashboard</a>
     <button class="back-button hidden" id="backBtn" onclick="goBack()">←</button>
     <button class="skip-button" id="skipBtn" onclick="skip()">Skip</button>
 
