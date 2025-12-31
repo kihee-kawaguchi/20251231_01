@@ -339,6 +339,7 @@
                 <ul class="nav-links">
                     <li><a href="#features" data-i18n="nav-features">Features</a></li>
                     <li><a href="#pricing" data-i18n="nav-pricing">Pricing</a></li>
+                    <li><a href="dashboard.html" data-i18n="nav-signin">Sign In</a></li>
                     <li><a href="#signup" data-i18n="nav-start">Get Started</a></li>
                 </ul>
                 <div class="lang-toggle">
@@ -491,6 +492,7 @@
                 'page-title': 'LifeOS AI - Your Personal Operating System for a Better Life',
                 'nav-features': 'Features',
                 'nav-pricing': 'Pricing',
+                'nav-signin': 'Sign In',
                 'nav-start': 'Get Started',
                 'hero-title': 'The Personal Operating System<br>for a Better Life',
                 'hero-subtitle': 'Organize health, money, work, and well-being in one place. Built for everyday life, not pressure.',
@@ -549,6 +551,7 @@
                 'page-title': 'LifeOS AI - より良い人生のためのパーソナルOS',
                 'nav-features': '機能',
                 'nav-pricing': '料金プラン',
+                'nav-signin': 'サインイン',
                 'nav-start': '始める',
                 'hero-title': 'より良い人生のための<br>パーソナルOS',
                 'hero-subtitle': '健康・お金・仕事・ウェルビーイングを一箇所で管理。プレッシャーではなく、日常生活のために作られました。',
@@ -659,13 +662,14 @@
                 language: currentLang
             };
 
-            console.log('Signup data:', formData);
-            const message = currentLang === 'ja'
-                ? 'ご登録ありがとうございます！無料ライフ概要を準備中です。'
-                : 'Thank you for signing up! Your free Life Overview is being prepared.';
-            alert(message);
+            // Save user data to localStorage
+            localStorage.setItem('userData', JSON.stringify(formData));
+            localStorage.setItem('lang', currentLang);
 
-            this.reset();
+            console.log('Signup data:', formData);
+
+            // Redirect to dashboard
+            window.location.href = 'dashboard.html';
         });
 
         // Smooth scrolling
