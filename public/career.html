@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career - LifeOS AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2C5F7F;
+            --secondary-color: #5A9BC6;
+            --text-dark: #2C3E50;
+            --text-light: #6C7A89;
+            --bg-light: #F8F9FA;
+            --white: #FFFFFF;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --border: #E0E0E0;
+            --purple: #9C27B0;
+            --indigo: #3F51B5;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            padding: 2rem 0;
+        }
+
+        .logo {
+            padding: 0 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .lang-toggle {
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: #EBF2F7;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-light);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+        }
+
+        .productivity-score {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1rem;
+            border-radius: 50%;
+            background: conic-gradient(var(--success) 0deg 331deg, var(--border) 331deg 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            width: 120px;
+            height: 120px;
+            background: var(--white);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            z-index: 1;
+        }
+
+        .score-label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .skills-list {
+            list-style: none;
+        }
+
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .skill-level {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--secondary-color);
+            transition: width 0.3s;
+        }
+
+        .goals-list {
+            list-style: none;
+        }
+
+        .goal-item {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .goal-title {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .goal-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-on-track {
+            background: #E8F5E9;
+            color: var(--success);
+        }
+
+        .status-in-progress {
+            background: #E3F2FD;
+            color: var(--indigo);
+        }
+
+        .status-completed {
+            background: #F3E5F5;
+            color: var(--purple);
+        }
+
+        .goal-deadline {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .courses-list {
+            list-style: none;
+        }
+
+        .course-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .course-details {
+            flex: 1;
+        }
+
+        .course-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .course-progress {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+
+        .achievement {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .achievement:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            border: 2px solid var(--white);
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .timeline-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 0.3rem;
+        }
+
+        .metric-small {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .metric-value-large {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .metric-label-small {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">LifeOS AI</div>
+        <div class="lang-toggle">
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="ja">日本語</button>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item" data-i18n="nav-dashboard" onclick="location.href='dashboard.html'">📊 Dashboard</li>
+            <li class="nav-item" data-i18n="nav-health" onclick="location.href='health.html'">💪 Health</li>
+            <li class="nav-item" data-i18n="nav-finance" onclick="location.href='finance.html'">💰 Finance</li>
+            <li class="nav-item active" data-i18n="nav-career">💼 Career</li>
+            <li class="nav-item" data-i18n="nav-wellbeing" onclick="location.href='wellbeing.html'">🧘 Well-being</li>
+            <li class="nav-item" data-i18n="nav-settings">⚙️ Settings</li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <h1 data-i18n="page-title">Career Development</h1>
+            <p data-i18n="page-subtitle">Track your professional growth and goals</p>
+        </div>
+
+        <div class="content-grid">
+            <!-- Productivity Score -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title" data-i18n="productivity-title">Weekly Productivity</h2>
+                    <span class="card-icon">📈</span>
+                </div>
+                <div class="productivity-score">
+                    <div class="score-circle">
+                        <span class="score-value">92%</span>
+                    </div>
+                    <div class="score-label" data-i18n="productivity-label">Excellent Performance</div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem;">
+                    <div class="metric-small">
+                        <div class="metric-value-large">38</div>
+                        <div class="metric-label-small" data-i18n="tasks-completed">Tasks Done</div>
+                    </div>
+                    <div class="metric-small">
+                        <div class="metric-value-large">42h</div>
+                        <div class="metric-label-small" data-i18n="hours-worked">Hours</div>
+                    </div>
+                    <div class="metric-small">
+                        <div class="metric-value-large">5</div>
+                        <div class="metric-label-small" data-i18n="meetings">Meetings</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Development -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title" data-i18n="skills-title">Skills Development</h2>
+                    <span class="card-icon">🎯</span>
+                </div>
+                <ul class="skills-list">
+                    <li class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name" data-i18n="skill-1">JavaScript/TypeScript</span>
+                            <span class="skill-level" data-i18n="level-advanced">Advanced</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%;"></div>
+                        </div>
+                    </li>
+                    <li class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name" data-i18n="skill-2">React/Next.js</span>
+                            <span class="skill-level" data-i18n="level-intermediate">Intermediate</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 70%;"></div>
+                        </div>
+                    </li>
+                    <li class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name" data-i18n="skill-3">Cloud Architecture</span>
+                            <span class="skill-level" data-i18n="level-intermediate">Intermediate</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 65%;"></div>
+                        </div>
+                    </li>
+                    <li class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name" data-i18n="skill-4">UI/UX Design</span>
+                            <span class="skill-level" data-i18n="level-beginner">Beginner</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 45%;"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Career Goals -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title" data-i18n="goals-title">Career Goals</h2>
+                    <span class="card-icon">🎯</span>
+                </div>
+                <ul class="goals-list">
+                    <li class="goal-item">
+                        <div class="goal-header">
+                            <span class="goal-title" data-i18n="goal-1">Get AWS Certification</span>
+                            <span class="goal-status status-on-track" data-i18n="status-on-track">On Track</span>
+                        </div>
+                        <div class="goal-deadline" data-i18n="goal-1-deadline">Deadline: March 31, 2026</div>
+                        <div class="progress-bar" style="margin-top: 0.5rem;">
+                            <div class="progress-fill" style="width: 60%; background: var(--success);"></div>
+                        </div>
+                    </li>
+                    <li class="goal-item">
+                        <div class="goal-header">
+                            <span class="goal-title" data-i18n="goal-2">Lead a Team Project</span>
+                            <span class="goal-status status-in-progress" data-i18n="status-in-progress">In Progress</span>
+                        </div>
+                        <div class="goal-deadline" data-i18n="goal-2-deadline">Deadline: February 15, 2026</div>
+                        <div class="progress-bar" style="margin-top: 0.5rem;">
+                            <div class="progress-fill" style="width: 40%; background: var(--indigo);"></div>
+                        </div>
+                    </li>
+                    <li class="goal-item">
+                        <div class="goal-header">
+                            <span class="goal-title" data-i18n="goal-3">Public Speaking Workshop</span>
+                            <span class="goal-status status-completed" data-i18n="status-completed">Completed</span>
+                        </div>
+                        <div class="goal-deadline" data-i18n="goal-3-deadline">Completed: December 20, 2025</div>
+                        <div class="progress-bar" style="margin-top: 0.5rem;">
+                            <div class="progress-fill" style="width: 100%; background: var(--purple);"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Current Courses -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title" data-i18n="courses-title">Current Courses</h2>
+                    <span class="card-icon">📚</span>
+                </div>
+                <ul class="courses-list">
+                    <li class="course-item">
+                        <div class="course-icon">☁️</div>
+                        <div class="course-details">
+                            <div class="course-name" data-i18n="course-1">AWS Solutions Architect</div>
+                            <div class="course-progress" data-i18n="course-1-progress">Module 8 of 12 • 67% Complete</div>
+                            <div class="progress-bar" style="margin-top: 0.5rem;">
+                                <div class="progress-fill" style="width: 67%;"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="course-item">
+                        <div class="course-icon">⚛️</div>
+                        <div class="course-details">
+                            <div class="course-name" data-i18n="course-2">Advanced React Patterns</div>
+                            <div class="course-progress" data-i18n="course-2-progress">Module 6 of 10 • 60% Complete</div>
+                            <div class="progress-bar" style="margin-top: 0.5rem;">
+                                <div class="progress-fill" style="width: 60%;"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="course-item">
+                        <div class="course-icon">🎨</div>
+                        <div class="course-details">
+                            <div class="course-name" data-i18n="course-3">UI/UX Design Fundamentals</div>
+                            <div class="course-progress" data-i18n="course-3-progress">Module 3 of 8 • 38% Complete</div>
+                            <div class="progress-bar" style="margin-top: 0.5rem;">
+                                <div class="progress-fill" style="width: 38%;"></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Achievements -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title" data-i18n="achievements-title">Achievements</h2>
+                    <span class="card-icon">🏆</span>
+                </div>
+                <div class="achievements-grid">
+                    <div class="achievement">
+                        <div class="achievement-icon">🥇</div>
+                        <div class="achievement-name" data-i18n="achievement-1">30 Day Streak</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">📖</div>
+                        <div class="achievement-name" data-i18n="achievement-2">5 Courses</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">💡</div>
+                        <div class="achievement-name" data-i18n="achievement-3">Innovation</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">🎯</div>
+                        <div class="achievement-name" data-i18n="achievement-4">Goal Master</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">🤝</div>
+                        <div class="achievement-name" data-i18n="achievement-5">Team Player</div>
+                    </div>
+                    <div class="achievement">
+                        <div class="achievement-icon">⭐</div>
+                        <div class="achievement-name" data-i18n="achievement-6">Excellence</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Career Timeline -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title" data-i18n="timeline-title">Career Milestones</h2>
+                    <span class="card-icon">🗓️</span>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date" data-i18n="timeline-1-date">December 2025</div>
+                        <div class="timeline-title" data-i18n="timeline-1-title">Completed Public Speaking Workshop</div>
+                        <div class="timeline-desc" data-i18n="timeline-1-desc">Enhanced presentation and communication skills</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date" data-i18n="timeline-2-date">October 2025</div>
+                        <div class="timeline-title" data-i18n="timeline-2-title">Promoted to Senior Developer</div>
+                        <div class="timeline-desc" data-i18n="timeline-2-desc">Recognition of technical leadership and project contributions</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date" data-i18n="timeline-3-date">June 2025</div>
+                        <div class="timeline-title" data-i18n="timeline-3-title">Led Migration Project</div>
+                        <div class="timeline-desc" data-i18n="timeline-3-desc">Successfully migrated legacy system to cloud infrastructure</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date" data-i18n="timeline-4-date">January 2025</div>
+                        <div class="timeline-title" data-i18n="timeline-4-title">Joined Current Company</div>
+                        <div class="timeline-desc" data-i18n="timeline-4-desc">Started as Full Stack Developer in tech startup</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // i18n translations
+        const translations = {
+            en: {
+                'nav-dashboard': '📊 Dashboard',
+                'nav-health': '💪 Health',
+                'nav-finance': '💰 Finance',
+                'nav-career': '💼 Career',
+                'nav-wellbeing': '🧘 Well-being',
+                'nav-settings': '⚙️ Settings',
+                'page-title': 'Career Development',
+                'page-subtitle': 'Track your professional growth and goals',
+                'productivity-title': 'Weekly Productivity',
+                'productivity-label': 'Excellent Performance',
+                'tasks-completed': 'Tasks Done',
+                'hours-worked': 'Hours',
+                'meetings': 'Meetings',
+                'skills-title': 'Skills Development',
+                'skill-1': 'JavaScript/TypeScript',
+                'skill-2': 'React/Next.js',
+                'skill-3': 'Cloud Architecture',
+                'skill-4': 'UI/UX Design',
+                'level-advanced': 'Advanced',
+                'level-intermediate': 'Intermediate',
+                'level-beginner': 'Beginner',
+                'goals-title': 'Career Goals',
+                'goal-1': 'Get AWS Certification',
+                'goal-2': 'Lead a Team Project',
+                'goal-3': 'Public Speaking Workshop',
+                'status-on-track': 'On Track',
+                'status-in-progress': 'In Progress',
+                'status-completed': 'Completed',
+                'goal-1-deadline': 'Deadline: March 31, 2026',
+                'goal-2-deadline': 'Deadline: February 15, 2026',
+                'goal-3-deadline': 'Completed: December 20, 2025',
+                'courses-title': 'Current Courses',
+                'course-1': 'AWS Solutions Architect',
+                'course-2': 'Advanced React Patterns',
+                'course-3': 'UI/UX Design Fundamentals',
+                'course-1-progress': 'Module 8 of 12 • 67% Complete',
+                'course-2-progress': 'Module 6 of 10 • 60% Complete',
+                'course-3-progress': 'Module 3 of 8 • 38% Complete',
+                'achievements-title': 'Achievements',
+                'achievement-1': '30 Day Streak',
+                'achievement-2': '5 Courses',
+                'achievement-3': 'Innovation',
+                'achievement-4': 'Goal Master',
+                'achievement-5': 'Team Player',
+                'achievement-6': 'Excellence',
+                'timeline-title': 'Career Milestones',
+                'timeline-1-date': 'December 2025',
+                'timeline-1-title': 'Completed Public Speaking Workshop',
+                'timeline-1-desc': 'Enhanced presentation and communication skills',
+                'timeline-2-date': 'October 2025',
+                'timeline-2-title': 'Promoted to Senior Developer',
+                'timeline-2-desc': 'Recognition of technical leadership and project contributions',
+                'timeline-3-date': 'June 2025',
+                'timeline-3-title': 'Led Migration Project',
+                'timeline-3-desc': 'Successfully migrated legacy system to cloud infrastructure',
+                'timeline-4-date': 'January 2025',
+                'timeline-4-title': 'Joined Current Company',
+                'timeline-4-desc': 'Started as Full Stack Developer in tech startup'
+            },
+            ja: {
+                'nav-dashboard': '📊 ダッシュボード',
+                'nav-health': '💪 健康',
+                'nav-finance': '💰 財務',
+                'nav-career': '💼 キャリア',
+                'nav-wellbeing': '🧘 ウェルビーイング',
+                'nav-settings': '⚙️ 設定',
+                'page-title': 'キャリア開発',
+                'page-subtitle': 'プロフェッショナルな成長と目標を追跡',
+                'productivity-title': '週間生産性',
+                'productivity-label': '優秀なパフォーマンス',
+                'tasks-completed': '完了タスク',
+                'hours-worked': '時間',
+                'meetings': '会議',
+                'skills-title': 'スキル開発',
+                'skill-1': 'JavaScript/TypeScript',
+                'skill-2': 'React/Next.js',
+                'skill-3': 'クラウドアーキテクチャ',
+                'skill-4': 'UI/UXデザイン',
+                'level-advanced': '上級',
+                'level-intermediate': '中級',
+                'level-beginner': '初級',
+                'goals-title': 'キャリア目標',
+                'goal-1': 'AWS認定取得',
+                'goal-2': 'チームプロジェクトをリード',
+                'goal-3': 'パブリックスピーキング講習',
+                'status-on-track': '順調',
+                'status-in-progress': '進行中',
+                'status-completed': '完了',
+                'goal-1-deadline': '期限: 2026年3月31日',
+                'goal-2-deadline': '期限: 2026年2月15日',
+                'goal-3-deadline': '完了: 2025年12月20日',
+                'courses-title': '受講中のコース',
+                'course-1': 'AWSソリューションアーキテクト',
+                'course-2': '上級Reactパターン',
+                'course-3': 'UI/UXデザイン基礎',
+                'course-1-progress': 'モジュール8/12 • 67%完了',
+                'course-2-progress': 'モジュール6/10 • 60%完了',
+                'course-3-progress': 'モジュール3/8 • 38%完了',
+                'achievements-title': '実績',
+                'achievement-1': '30日連続',
+                'achievement-2': '5コース',
+                'achievement-3': 'イノベーション',
+                'achievement-4': '目標達成者',
+                'achievement-5': 'チームプレイヤー',
+                'achievement-6': '卓越性',
+                'timeline-title': 'キャリアのマイルストーン',
+                'timeline-1-date': '2025年12月',
+                'timeline-1-title': 'パブリックスピーキング講習を修了',
+                'timeline-1-desc': 'プレゼンテーションとコミュニケーションスキルを向上',
+                'timeline-2-date': '2025年10月',
+                'timeline-2-title': 'シニアデベロッパーに昇進',
+                'timeline-2-desc': '技術的リーダーシップとプロジェクトへの貢献が評価',
+                'timeline-3-date': '2025年6月',
+                'timeline-3-title': 'マイグレーションプロジェクトをリード',
+                'timeline-3-desc': 'レガシーシステムをクラウドインフラに移行成功',
+                'timeline-4-date': '2025年1月',
+                'timeline-4-title': '現在の会社に入社',
+                'timeline-4-desc': 'テックスタートアップでフルスタック開発者として開始'
+            }
+        };
+
+        // Get current language
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        // Update content function
+        function updateContent(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Language toggle
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                updateContent(this.getAttribute('data-lang'));
+            });
+        });
+
+        // Initialize language
+        updateContent(currentLang);
+    </script>
+</body>
+</html>
