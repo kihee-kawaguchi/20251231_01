@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - LifeOS AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2C5F7F;
+            --secondary-color: #5A9BC6;
+            --text-dark: #2C3E50;
+            --text-light: #6C7A89;
+            --bg-light: #F8F9FA;
+            --white: #FFFFFF;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --border: #E0E0E0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: var(--white);
+            border-right: 1px solid var(--border);
+            padding: 2rem 0;
+        }
+
+        .logo {
+            padding: 0 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .lang-toggle {
+            padding: 0 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn {
+            flex: 1;
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-color);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: #EBF2F7;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .header {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-light);
+        }
+
+        .settings-container {
+            max-width: 800px;
+        }
+
+        .settings-section {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .setting-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .setting-label {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .setting-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: var(--border);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: var(--success);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: var(--white);
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: var(--white);
+            cursor: pointer;
+        }
+
+        .button {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .button-primary {
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        .button-primary:hover {
+            background: var(--secondary-color);
+        }
+
+        .button-danger {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .button-danger:hover {
+            background: #D32F2F;
+        }
+
+        .button-secondary {
+            background: var(--border);
+            color: var(--text-dark);
+        }
+
+        .button-secondary:hover {
+            background: #D0D0D0;
+        }
+
+        .plan-card {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .plan-card.active {
+            border-color: var(--primary-color);
+            background: #EBF2F7;
+        }
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .plan-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .plan-feature {
+            padding: 0.3rem 0;
+            color: var(--text-dark);
+        }
+
+        .plan-feature::before {
+            content: '✓ ';
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .current-badge {
+            display: inline-block;
+            background: var(--success);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .danger-zone {
+            background: #FFF5F5;
+            border: 1px solid var(--danger);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .danger-zone h3 {
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+
+        .danger-zone p {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="logo">LifeOS AI</div>
+        <div class="lang-toggle">
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="ja">日本語</button>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item" data-i18n="nav-dashboard" onclick="location.href='dashboard.html'">📊 Dashboard</li>
+            <li class="nav-item" data-i18n="nav-health" onclick="location.href='health.html'">💪 Health</li>
+            <li class="nav-item" data-i18n="nav-finance" onclick="location.href='finance.html'">💰 Finance</li>
+            <li class="nav-item" data-i18n="nav-career" onclick="location.href='career.html'">💼 Career</li>
+            <li class="nav-item" data-i18n="nav-wellbeing" onclick="location.href='wellbeing.html'">🧘 Well-being</li>
+            <li class="nav-item active" data-i18n="nav-settings">⚙️ Settings</li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <h1 data-i18n="page-title">Settings</h1>
+            <p data-i18n="page-subtitle">Manage your account and preferences</p>
+        </div>
+
+        <div class="settings-container">
+            <!-- Account Settings -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <span>👤</span>
+                    <span data-i18n="account-title">Account Settings</span>
+                </h2>
+                <div class="input-group">
+                    <label class="input-label" data-i18n="name-label">Full Name</label>
+                    <input type="text" class="input-field" value="User" placeholder="Enter your name">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" data-i18n="email-label">Email Address</label>
+                    <input type="email" class="input-field" value="user@example.com" placeholder="Enter your email">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" data-i18n="timezone-label">Timezone</label>
+                    <select class="select-field">
+                        <option>UTC-8 (Pacific Time)</option>
+                        <option>UTC-5 (Eastern Time)</option>
+                        <option>UTC+0 (London)</option>
+                        <option selected>UTC+9 (Tokyo)</option>
+                    </select>
+                </div>
+                <button class="button button-primary" data-i18n="save-changes">Save Changes</button>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <span>🔔</span>
+                    <span data-i18n="notifications-title">Notifications</span>
+                </h2>
+                <div class="setting-item">
+                    <div class="setting-header">
+                        <div>
+                            <div class="setting-label" data-i18n="email-notifications">Email Notifications</div>
+                            <div class="setting-desc" data-i18n="email-notifications-desc">Receive updates via email</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-header">
+                        <div>
+                            <div class="setting-label" data-i18n="daily-summary">Daily Summary</div>
+                            <div class="setting-desc" data-i18n="daily-summary-desc">Get a daily recap at 8:00 AM</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-header">
+                        <div>
+                            <div class="setting-label" data-i18n="goal-reminders">Goal Reminders</div>
+                            <div class="setting-desc" data-i18n="goal-reminders-desc">Remind me about my goals</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-header">
+                        <div>
+                            <div class="setting-label" data-i18n="achievement-alerts">Achievement Alerts</div>
+                            <div class="setting-desc" data-i18n="achievement-alerts-desc">Celebrate my achievements</div>
+                        </div>
+                        <div class="toggle-switch" onclick="this.classList.toggle('active')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Settings -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <span>🔒</span>
+                    <span data-i18n="privacy-title">Privacy & Security</span>
+                </h2>
+                <div class="setting-item">
+                    <div class="setting-header">
+                        <div>
+                            <div class="setting-label" data-i18n="data-sharing">Data Sharing</div>
+                            <div class="setting-desc" data-i18n="data-sharing-desc">Share anonymized data for improvements</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-header">
+                        <div>
+                            <div class="setting-label" data-i18n="two-factor">Two-Factor Authentication</div>
+                            <div class="setting-desc" data-i18n="two-factor-desc">Add extra security to your account</div>
+                        </div>
+                        <div class="toggle-switch" onclick="this.classList.toggle('active')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <button class="button button-secondary" data-i18n="change-password">Change Password</button>
+                </div>
+            </div>
+
+            <!-- Subscription Plan -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <span>💳</span>
+                    <span data-i18n="subscription-title">Subscription Plan</span>
+                </h2>
+
+                <div class="plan-card active">
+                    <div class="plan-header">
+                        <div>
+                            <div class="plan-name" data-i18n="plan-free">Free Plan</div>
+                            <span class="current-badge" data-i18n="current-plan">Current Plan</span>
+                        </div>
+                        <div class="plan-price">$0</div>
+                    </div>
+                    <ul class="plan-features">
+                        <li class="plan-feature" data-i18n="plan-free-1">Basic life overview dashboard</li>
+                        <li class="plan-feature" data-i18n="plan-free-2">Manual data entry</li>
+                        <li class="plan-feature" data-i18n="plan-free-3">Weekly summary reports</li>
+                    </ul>
+                </div>
+
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <div class="plan-name" data-i18n="plan-daily">Daily Guidance</div>
+                        <div class="plan-price">$19<span style="font-size: 0.8rem; color: var(--text-light);">/mo</span></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li class="plan-feature" data-i18n="plan-daily-1">Everything in Free</li>
+                        <li class="plan-feature" data-i18n="plan-daily-2">AI-powered daily actions</li>
+                        <li class="plan-feature" data-i18n="plan-daily-3">Smart goal recommendations</li>
+                        <li class="plan-feature" data-i18n="plan-daily-4">Priority email support</li>
+                    </ul>
+                    <button class="button button-primary" style="width: 100%; margin-top: 1rem;" data-i18n="upgrade-plan">Upgrade Plan</button>
+                </div>
+
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <div class="plan-name" data-i18n="plan-future">Future Outlook</div>
+                        <div class="plan-price">$39<span style="font-size: 0.8rem; color: var(--text-light);">/mo</span></div>
+                    </div>
+                    <ul class="plan-features">
+                        <li class="plan-feature" data-i18n="plan-future-1">Everything in Daily Guidance</li>
+                        <li class="plan-feature" data-i18n="plan-future-2">5-year life trajectory simulation</li>
+                        <li class="plan-feature" data-i18n="plan-future-3">Monthly trend reports</li>
+                        <li class="plan-feature" data-i18n="plan-future-4">Advanced analytics</li>
+                    </ul>
+                    <button class="button button-primary" style="width: 100%; margin-top: 1rem;" data-i18n="upgrade-plan">Upgrade Plan</button>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="settings-section">
+                <h2 class="section-title">
+                    <span>⚠️</span>
+                    <span data-i18n="danger-zone-title">Danger Zone</span>
+                </h2>
+                <div class="danger-zone">
+                    <h3 data-i18n="delete-account-title">Delete Account</h3>
+                    <p data-i18n="delete-account-desc">Once you delete your account, there is no going back. All your data will be permanently removed.</p>
+                    <button class="button button-danger" data-i18n="delete-account-btn">Delete My Account</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // i18n translations
+        const translations = {
+            en: {
+                'nav-dashboard': '📊 Dashboard',
+                'nav-health': '💪 Health',
+                'nav-finance': '💰 Finance',
+                'nav-career': '💼 Career',
+                'nav-wellbeing': '🧘 Well-being',
+                'nav-settings': '⚙️ Settings',
+                'page-title': 'Settings',
+                'page-subtitle': 'Manage your account and preferences',
+                'account-title': 'Account Settings',
+                'name-label': 'Full Name',
+                'email-label': 'Email Address',
+                'timezone-label': 'Timezone',
+                'save-changes': 'Save Changes',
+                'notifications-title': 'Notifications',
+                'email-notifications': 'Email Notifications',
+                'email-notifications-desc': 'Receive updates via email',
+                'daily-summary': 'Daily Summary',
+                'daily-summary-desc': 'Get a daily recap at 8:00 AM',
+                'goal-reminders': 'Goal Reminders',
+                'goal-reminders-desc': 'Remind me about my goals',
+                'achievement-alerts': 'Achievement Alerts',
+                'achievement-alerts-desc': 'Celebrate my achievements',
+                'privacy-title': 'Privacy & Security',
+                'data-sharing': 'Data Sharing',
+                'data-sharing-desc': 'Share anonymized data for improvements',
+                'two-factor': 'Two-Factor Authentication',
+                'two-factor-desc': 'Add extra security to your account',
+                'change-password': 'Change Password',
+                'subscription-title': 'Subscription Plan',
+                'plan-free': 'Free Plan',
+                'current-plan': 'Current Plan',
+                'plan-free-1': 'Basic life overview dashboard',
+                'plan-free-2': 'Manual data entry',
+                'plan-free-3': 'Weekly summary reports',
+                'plan-daily': 'Daily Guidance',
+                'plan-daily-1': 'Everything in Free',
+                'plan-daily-2': 'AI-powered daily actions',
+                'plan-daily-3': 'Smart goal recommendations',
+                'plan-daily-4': 'Priority email support',
+                'plan-future': 'Future Outlook',
+                'plan-future-1': 'Everything in Daily Guidance',
+                'plan-future-2': '5-year life trajectory simulation',
+                'plan-future-3': 'Monthly trend reports',
+                'plan-future-4': 'Advanced analytics',
+                'upgrade-plan': 'Upgrade Plan',
+                'danger-zone-title': 'Danger Zone',
+                'delete-account-title': 'Delete Account',
+                'delete-account-desc': 'Once you delete your account, there is no going back. All your data will be permanently removed.',
+                'delete-account-btn': 'Delete My Account'
+            },
+            ja: {
+                'nav-dashboard': '📊 ダッシュボード',
+                'nav-health': '💪 健康',
+                'nav-finance': '💰 財務',
+                'nav-career': '💼 キャリア',
+                'nav-wellbeing': '🧘 ウェルビーイング',
+                'nav-settings': '⚙️ 設定',
+                'page-title': '設定',
+                'page-subtitle': 'アカウントと設定を管理',
+                'account-title': 'アカウント設定',
+                'name-label': '氏名',
+                'email-label': 'メールアドレス',
+                'timezone-label': 'タイムゾーン',
+                'save-changes': '変更を保存',
+                'notifications-title': '通知',
+                'email-notifications': 'メール通知',
+                'email-notifications-desc': 'メールで更新を受け取る',
+                'daily-summary': '毎日のサマリー',
+                'daily-summary-desc': '午前8時に毎日の概要を取得',
+                'goal-reminders': '目標リマインダー',
+                'goal-reminders-desc': '目標についてリマインド',
+                'achievement-alerts': '達成アラート',
+                'achievement-alerts-desc': '達成を祝う',
+                'privacy-title': 'プライバシーとセキュリティ',
+                'data-sharing': 'データ共有',
+                'data-sharing-desc': '改善のために匿名データを共有',
+                'two-factor': '二要素認証',
+                'two-factor-desc': 'アカウントのセキュリティを強化',
+                'change-password': 'パスワード変更',
+                'subscription-title': 'サブスクリプションプラン',
+                'plan-free': '無料プラン',
+                'current-plan': '現在のプラン',
+                'plan-free-1': '基本的なライフ概要ダッシュボード',
+                'plan-free-2': '手動データ入力',
+                'plan-free-3': '週次サマリーレポート',
+                'plan-daily': 'デイリーガイダンス',
+                'plan-daily-1': '無料プランのすべて',
+                'plan-daily-2': 'AI駆動の毎日のアクション',
+                'plan-daily-3': 'スマート目標推奨',
+                'plan-daily-4': '優先メールサポート',
+                'plan-future': 'フューチャーアウトルック',
+                'plan-future-1': 'デイリーガイダンスのすべて',
+                'plan-future-2': '5年間のライフ軌道シミュレーション',
+                'plan-future-3': '月次トレンドレポート',
+                'plan-future-4': '高度な分析',
+                'upgrade-plan': 'プランをアップグレード',
+                'danger-zone-title': '危険ゾーン',
+                'delete-account-title': 'アカウント削除',
+                'delete-account-desc': 'アカウントを削除すると、元に戻すことはできません。すべてのデータが完全に削除されます。',
+                'delete-account-btn': 'アカウントを削除'
+            }
+        };
+
+        // Get current language
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        // Update content function
+        function updateContent(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Language toggle
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                updateContent(this.getAttribute('data-lang'));
+            });
+        });
+
+        // Initialize language
+        updateContent(currentLang);
+    </script>
+</body>
+</html>
